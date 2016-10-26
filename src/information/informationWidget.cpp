@@ -437,6 +437,23 @@ void Information::createSurfaceNote2D(double* point, int* pointImage, ColorType 
 	emit addNavigationItem(notePath, SURFACENOTE, NOTE2D);
 }
 
+void Information::createPolygonNote2D(std::vector<std::pair<int, int> >* polygon, ColorType color)
+{
+	//qDebug() <<mw()->VTKA()->mFilename;
+	updateCurrentPath();
+	int size = mPolygonNotes2D[notePath].size();
+	qDebug() << "Create Polygon Note 2D, current size = " << size;
+	PolygonNote2D* newNote = new PolygonNote2D(notePath, polygon, size, color, mw()->mUserName);
+	newNote->showNote();
+	mPolygonNotes2D[notePath].push_back(newNote);
+	connect(mPolygonNotes2D[notePath][size], SIGNAL(removeNote(int, QString*)), this, SLOT(removePolygonNote2D(int, QString*)));
+	connect(this, SIGNAL(saveAll()), mPolygonNotes2D[notePath][size], SLOT(save()));
+	connect(this, SIGNAL(closeAll()), mPolygonNotes2D[notePath][size], SLOT(close()));
+	connect(this, SIGNAL(replaceUserName(const QString, const QString)), mPolygonNotes2D[notePath][size], SLOT(replaceUserName(const QString, const QString)));
+	emit addNavigationItem(notePath, POLYGONNOTE, NOTE2D);
+	//// TO BE TESTED
+}
+
 bool Information::loadPointNote(const QString path, bool isLoadNoteMark, bool isDisplayNoteMark)
 {
 	QDir dir(notePath);

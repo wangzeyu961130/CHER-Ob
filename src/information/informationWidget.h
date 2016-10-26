@@ -4,6 +4,7 @@
 
  - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
 			 Min H. Kim (minhkim@cs.yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -227,6 +228,13 @@ public:
 	 * @param  color       The color of the note.
 	 */
 	void createSurfaceNote2D(double* point, int* pointImage, ColorType color);
+
+	/**
+	 * @brief  Create 2D notes with location info.
+	 * @param  polygon     TO BE IMPLEMENTED
+	 * @param  color       The color of the note.
+	 */
+	void createPolygonNote2D(std::vector<std::pair<int, int> >* polygon, ColorType color);
 
 	/**
 	 * @brief  Open 3D point notes with location info.
@@ -457,6 +465,7 @@ private:
     QMap<QString, QVector<FrustumNote*> > mFrustumNotes;
     QMap<QString, QVector<PointNote2D*> > mPointNotes2D;
     QMap<QString, QVector<SurfaceNote2D*> > mSurfaceNotes2D;
+    QMap<QString, QVector<PolygonNote2D*> > mPolygonNotes2D;
 	QMap<QString, bool> hasNotesRemoved;
 	QMap<QString, QString> removedAnnotation;
 	bool skipTextChange;

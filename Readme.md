@@ -76,6 +76,7 @@ GPL included in the packaging of this file. Please review the following informat
 **Yale Computer Graphics Group**<br />
 - Weiqi Shi (weiqi.shi@yale.edu)
 - Ying Yang (ying.yang.yy368@yale.edu)
+- Zeyu Wang (zeyu.wang@yale.edu)
 - Min H. Kim (minhkim@cs.yale.edu)
 - David Tidmarsh (tidmarsh@aya.yale.edu)
 - Eleni Kotoula (eleni.kotoula@yale.edu)

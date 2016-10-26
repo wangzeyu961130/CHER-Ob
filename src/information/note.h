@@ -3,6 +3,7 @@
  - Codename: CHER-Ob (Yale Computer Graphics Group)
 
  - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -520,4 +521,50 @@ private:
 	double* mPoint;	// The size is four, start x, y, end x, y
 	int* mImagePoint;	// The size is four, start x, y, end x, y, image coordinate
 };
+/**
+ * This class is the 2D point note.
+ */
+class PolygonNote2D: public Note
+{
+	Q_OBJECT
+
+public:
+	/**
+	 * @brief  Constructor when create a new 2D point notes with location info.
+	 * @param  path        The full note path.
+	 * @param  point       Point position in world coordinate.
+	 * @param  pointImage  The image coordinate, which is saved to mark the note on report.
+	 * @param  type        The color of the note.
+	 * @param  user        The user who creates the note.
+	 */
+	PolygonNote2D(QString path, const std::vector<std::pair<int, int> >* polygon, const int noteId, const ColorType type = YELLOW, const QString user = QString());
+
+	/**
+	 * @brief  Constructor when load a 2D point notes from note file.
+	 * @param  path       The full note path.
+	 * @param  fileName   The name of the note file.
+	 * @param  noteId     The cell of id the point belongs to.
+	 * @param  isSucceed  Whether the note is created successfully.
+	 */
+	PolygonNote2D(QString path, QString fileName, const int noteId, bool& isSucceed);
+
+	/**
+	 * @brief  Get the position of the point note.
+	 */
+	std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
+
+	/**
+	 * @brief  Get the note id of the point note.
+	 */
+	int getNoteId() { return mNoteId; }
+
+	/**
+	 * @brief  Remove the note from imformationWidget class. It is called when trying to remove all the notes.
+	 */
+	void removePolygonNote2D();
+
+private:
+	std::vector<std::pair<int, int> >* mPolygon;
+};
+
 #endif // NOTE_H

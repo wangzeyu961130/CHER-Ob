@@ -3,6 +3,7 @@
  - Codename: CHER-Ob (Yale Computer Graphics Group)
 
  - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -1412,6 +1413,20 @@ void SurfaceNote2D::removeSurfaceNote2D()
 	this->hideNote(); 
 }
 
-
-
-
+PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<int, int> >* polygon, const int noteId, const ColorType type, const QString user)
+	: Note(noteId, type)
+{
+	//// TO BE IMPLEMETNED
+}
+PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, bool& isSucceed)
+	: Note(noteId)
+{
+	//// TO BE IMPLEMENTED
+}
+void PolygonNote2D::removePolygonNote2D()
+{
+	qDebug()<<"remove Polygon note 2d"<<mFile->fileName();
+	mFile->remove();
+	this->hideNote(); 
+	//// TO BE TESTED
+}

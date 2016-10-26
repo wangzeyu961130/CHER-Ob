@@ -4,6 +4,7 @@
 
  - Writers:  Min H. Kim (minhkim@cs.yale.edu)
 			 Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -201,7 +202,7 @@ public:
   void SetAnnotation(bool status, NoteMode noteMode, ColorType color = YELLOW, bool visibilityOn = true)
   {
 	  //turnoffHighlight();
-	  if (noteMode != POINTNOTE && noteMode != SURFACENOTE)
+	  if (noteMode != POINTNOTE && noteMode != SURFACENOTE && noteMode != POLYGONNOTE)
 	  {
 		  qDebug() << "Node Type is not correct!" << noteMode;
 		  return;
@@ -223,6 +224,7 @@ public:
 			  {
 				 mSelectedSurface[i].second->VisibilityOn();
 			  }
+			  //// FOR POLYGON NOTES: VISIBLE
 		  }
 		  mw()->mInformation->startAnnotation();
 		  mw()->VTKA()->update();
@@ -237,6 +239,7 @@ public:
 		  {
 			  mSelectedSurface[i].second->VisibilityOff();
 		  }
+		  //// FOR POLYGON NOTES: VISIBLE
 		  mw()->mInformation->finishAnnotation();
 		  finishNote();
 	  }
@@ -253,6 +256,7 @@ public:
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
       vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+	  //// HOW TO INITIALIZE POLYGON NOTE?
 	  if (mNoteMode == SURFACENOTE || mNoteMode == FRUSTUMNOTE)
 	  {
 		 // vtkSmartPointer<vtkInteractorStyleRubberBandPick> style 
@@ -363,9 +367,8 @@ public:
 		  mSelectedPoint.push_back(std::make_pair(point, actor));
 		  displayPointNote(mapper, point);
 		  mw()->mInformation->createPointNote2D(point, pointImageCoordinate, mColor);
+	  }
 
-      }
-	  
   }
 
   void drawSurfaceNote(unsigned int* rect)
@@ -380,11 +383,11 @@ public:
 	  double y1 = static_cast<double>(rect[3]);
 
 	  vtkSmartPointer<vtkCellPicker> picker = vtkSmartPointer<vtkCellPicker>::New();
-      picker->SetTolerance(0.0005);
+	  picker->SetTolerance(0.0005);
 	  double* pos;
 	  int startPointImageCoordinate[3], endPointImageCoordinate[3];
 
-      picker->Pick(x0, y0, 0, interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
+	  picker->Pick(x0, y0, 0, interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
 	  if (picker->GetCellId() == -1)
 	  {
 		  return;
@@ -399,7 +402,7 @@ public:
 	  {
 		  return;
 	  }
-	  
+
 	  pos = picker->GetPickPosition();
 	  point[2] = pos[0];
 	  point[3] = pos[1];
@@ -412,24 +415,89 @@ public:
 
 	  vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
 
-      vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	  vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	  actor->SetMapper(mapper);
 	  actor->PickableOff();
 	  actor->GetProperty()->LightingOn();
-      actor->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
-      actor->GetProperty()->SetLineWidth(2);
-      actor->VisibilityOn();
+	  actor->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
+	  actor->GetProperty()->SetLineWidth(2);
+	  actor->VisibilityOn();
 
-      renderer->AddActor(actor);
+	  renderer->AddActor(actor);
 
 	  mSelectedSurface.push_back(std::make_pair(point, actor));
 
 	  displaySurfaceNote(mapper, point);
 
 	  mw()->mInformation->createSurfaceNote2D(point, imageCoordinate, mColor);
- 
+
   }
 
+
+  void drawPolygonNote()
+  {
+	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+
+	  vtkSmartPointer<vtkPoints> Points = vtkSmartPointer<vtkPoints>::New();
+	  vtkSmartPointer<vtkPolyLine> PolyLine = vtkSmartPointer<vtkPolyLine>::New();
+	  vtkSmartPointer<vtkCellArray> CellArray = vtkSmartPointer<vtkCellArray>::New();
+	  vtkSmartPointer<vtkPolyData> PolyData = vtkSmartPointer<vtkPolyData>::New();
+	  vtkSmartPointer<vtkPolyDataMapper> PolyDataMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	  vtkSmartPointer<vtkActor> Actor = vtkSmartPointer<vtkActor>::New();
+
+	  std::vector<std::pair<int, int> >* polygonPointer;
+
+	  int currPos[2];
+	  interactor->GetEventPosition(currPos);
+	  vtkSmartPointer<vtkCellPicker> picker = vtkSmartPointer<vtkCellPicker>::New();
+	  picker->SetTolerance(0.0005);
+	  picker->Pick(currPos[0], currPos[1], 0, renderer);
+
+	  if (picker->GetCellId() != -1)
+	  {
+		  double* point = new double[3];
+		  picker->GetPickPosition(point);
+		  int* pointImageCoordinate = new int[3];
+		  picker->GetPointIJK(pointImageCoordinate);
+
+		  if(!mw()->mInformation) return;
+
+		  polygonPoints.push_back(std::make_pair(pointImageCoordinate[0], pointImageCoordinate[1]));
+		  std::vector<std::pair<int, int> >::iterator it;
+		  for (it = polygonPoints.begin(); it != polygonPoints.end(); it++)
+			  Points->InsertNextPoint(it->first, it->second, 0);
+
+		  PolyLine->GetPointIds()->SetNumberOfIds(polygonPoints.size());
+		  for (int i = 0; i < polygonPoints.size(); i++)
+				PolyLine->GetPointIds()->SetId(i, i);
+		  if (polygonPoints.size() > 2 && abs(polygonPoints.back().first - polygonPoints.front().first) < 10
+				&& abs(polygonPoints.back().second - polygonPoints.front().second) < 10)
+			{
+				PolyLine->GetPointIds()->SetId(polygonPoints.size()-1, 0);
+				std::vector<std::pair<int, int> > toSavePolygon = polygonPoints;
+				polygonPointer = &toSavePolygon;
+				polygonPoints.clear();
+				qDebug() << "Draw Polygon Note";
+			}
+		 CellArray->InsertNextCell(PolyLine);
+			PolyData->SetPoints(Points);
+			PolyData->SetLines(CellArray);
+			PolyDataMapper->SetInput(PolyData);
+			Actor->SetMapper(PolyDataMapper);
+			Actor->PickableOff();
+			Actor->GetProperty()->LightingOn();
+			Actor->GetProperty()->SetColor(0, 0, 1);
+			Actor->GetProperty()->SetLineWidth(2);
+			Actor->VisibilityOn();
+      
+		  renderer->AddActor(Actor);
+		  mSelectedPolygon.push_back(std::make_pair(polygonPointer, Actor));
+		  displayPolygonNote(PolyDataMapper, polygonPointer);
+		  mw()->mInformation->createPolygonNote2D(polygonPointer, mColor);
+	  }
+	  //// TO BE TESTED
+  }
   void displayPointNote(vtkSmartPointer<vtkPolyDataMapper> mapper, double* select)
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
@@ -506,6 +574,34 @@ public:
 	  mapper->SetInput(polyData);
   }
 
+  void displayPolygonNote(vtkSmartPointer<vtkPolyDataMapper> mapper, std::vector<std::pair<int, int> >* select)
+  {
+	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+
+	  vtkSmartPointer<vtkPoints> Points = vtkSmartPointer<vtkPoints>::New();
+	  vtkSmartPointer<vtkPolyLine> PolyLine = vtkSmartPointer<vtkPolyLine>::New();
+	  vtkSmartPointer<vtkCellArray> CellArray = vtkSmartPointer<vtkCellArray>::New();
+	  vtkSmartPointer<vtkPolyData> PolyData = vtkSmartPointer<vtkPolyData>::New();
+
+	  std::vector<std::pair<int, int> >::iterator it;
+	  for (it = select->begin(); it != select->end(); it++)
+		  Points->InsertNextPoint(it->first, it->second, 0);;
+	  PolyLine->GetPointIds()->SetNumberOfIds(select->size());
+	  for (int i = 0; i < select->size(); i++)
+		  PolyLine->GetPointIds()->SetId(i, i);
+	  if (select->size() > 2 && abs(select->back().first - select->front().first) < 10
+		  && abs(select->back().second - select->front().second) < 10)
+	  {
+		  PolyLine->GetPointIds()->SetId(select->size()-1, 0);
+	  }
+	  CellArray->InsertNextCell(PolyLine);
+	  PolyData->SetPoints(Points);
+	  PolyData->SetLines(CellArray);
+	  mapper->SetInput(PolyData);
+	  //// TO BE TESTED
+  }
+
   void highlightPointNote(int id)
   {
 	  double* color = new double[3];
@@ -530,6 +626,11 @@ public:
 	  mSelectedSurface[mSurfaceNoteHighlight].second->GetProperty()->SetColor(1-color[0], 1-color[1], 1-color[2]);
   }
 
+  void highlightPolygonNote(int id)
+  {
+	  //// TO BE IMPLEMENTED
+  }
+
   void turnoffHighlight()
   {
 	   double* color = new double[3];
@@ -545,6 +646,7 @@ public:
 		   mSelectedSurface[mSurfaceNoteHighlight].second->GetProperty()->SetColor(1-color[0], 1-color[1], 1-color[2]);		  
 		   mSurfaceNoteHighlight = -1;		  
 	   }
+	   //// HOW TO TURN OFF HIGHLIGHT FOR POLYGON NOTES?
   }
 
   bool choosePointNote()
@@ -624,6 +726,11 @@ public:
 	  return false;
   }
 
+  bool choosePolygonNote()
+  {
+	  //// TO BE IMPLEMENTED
+  }
+
   void removePointNoteMark(double* point)
   {
 	  bool erase = false;
@@ -677,6 +784,11 @@ public:
 	  if (!erase)	qDebug() << "Cannot Find the Exact SurfaceNote to remove!"<<endl;
   }
 
+  void removePolygonNoteMark(double* point)
+  {
+	  //// TO BE IMPLEMENTED
+  }
+
   void openPointNoteMark(double* point)
   {
 	  for (int i = 0; i < mSelectedPoint.size(); ++i) 
@@ -719,6 +831,11 @@ public:
 			  break;
 		  }
 	  }
+  }
+
+  void openPolygonNoteMark(double* point)
+  {
+	  //// TO BE IMPLEMENTED
   }
 
   void displayLoadPointNote(double* point, const ColorType color, bool isDisplay = false)
@@ -767,6 +884,11 @@ public:
 
 	  displaySurfaceNote(mapper, point);
  
+  }
+
+  void displayLoadPolygonNote(double* point, const ColorType color, bool idDisplay = false)
+  {
+	  //// TO BE IMPLEMENTED
   }
 
   void updateLightingPosition() {
@@ -1100,101 +1222,104 @@ public:
   // 5) 'r' = reset window/level
   // 6) shift + 'r' = reset camera
   virtual void Execute(vtkObject *, unsigned long event, void * callData)
-    {
-    vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
-    vtkSmartPointer<vtkInteractorStyle> style = vtkInteractorStyle::SafeDownCast(interactor->GetInteractorStyle()); // unstable
+  {
+	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+	  vtkSmartPointer<vtkInteractorStyle> style = vtkInteractorStyle::SafeDownCast(interactor->GetInteractorStyle()); // unstable
 
-    displayInfoAnnotation(true);
-	//qDebug()<<"Execute " <<event;
-    if (event == vtkCommand::LeftButtonPressEvent)
-      {
-        this->Slicing = 1;
-		if (mUserIsAnnotating)
-        {
-			if (!choosePointNote() && !chooseSurfaceNote())
-			{
-				//turnoffHighlight();
-			}
-		}
-        if (style)  { style->OnLeftButtonDown(); }
-      }
-    else if (event == vtkCommand::LeftButtonReleaseEvent)
-      {
-        this->Slicing = 0;
-        if (style)  { style->OnLeftButtonUp(); }
-      }
-    else if (event == vtkCommand::RightButtonPressEvent)
-      {
-//        if (style)  { style->OnRightButtonDown(); }
+	  displayInfoAnnotation(true);
+	  //qDebug()<<"Execute " <<event;
+	  if (event == vtkCommand::LeftButtonPressEvent)
+	  {
+		  this->Slicing = 1;
+		  if (mUserIsAnnotating)
+		  {
+			  if (!choosePointNote() && !chooseSurfaceNote())
+			  {
+				  //turnoffHighlight();
+			  }
+		  }
+		  if (style)  { style->OnLeftButtonDown(); }
+	  }
+	  else if (event == vtkCommand::LeftButtonReleaseEvent)
+	  {
+		  this->Slicing = 0;
+		  if (style)  { style->OnLeftButtonUp(); }
+	  }
+	  else if (event == vtkCommand::RightButtonPressEvent)
+	  {
+		  //        if (style)  { style->OnRightButtonDown(); }
 		  if (mUserIsAnnotating && mNoteMode == POINTNOTE)
-          {
+		  {
 			  drawPointNote();
 		  }
-      }
-    else if (event == vtkCommand::RightButtonReleaseEvent)
-      {
-//        if (style)  { style->OnRightButtonUp(); }
-      }
-    else if (event == vtkCommand::MiddleButtonPressEvent)
-      {
-        if (style)  { style->OnMiddleButtonDown(); }
-      }
-    else if (event == vtkCommand::MiddleButtonReleaseEvent)
-      {
-        if (style)  { style->OnMiddleButtonUp(); }
-      }
-    else if (event == vtkCommand::MouseWheelForwardEvent)
-      {
-        if (style)  { style->OnMouseWheelForward(); }
-      }
-    else if (event == vtkCommand::MouseWheelBackwardEvent)
-      {
-        if (style)  { style->OnMouseWheelBackward(); }
-      }
-    else if (event == vtkCommand::MouseMoveEvent)
-      {
-#ifdef SUPPORT_LASTPICK
-      if (this->Slicing)
-        {
-        vtkSmartPointer<vtkImageReslice> reslice = this->ImageReslice;
-
-        // Increment slice position by deltaY of mouse
-        int deltaY = lastPos[1] - currPos[1];
-
-        reslice->GetOutput()->UpdateInformation();
-        double sliceSpacing = reslice->GetOutput()->GetSpacing()[2];
-        vtkSmartPointer<vtkMatrix4x4> matrix = reslice->GetResliceAxes();
-        // move the center point that we are slicing through
-        double point[4];
-        double center[4];
-        point[0] = 0.0;
-        point[1] = 0.0;
-        point[2] = sliceSpacing * deltaY;
-        point[3] = 1.0;
-        matrix->MultiplyPoint(point, center);
-        matrix->SetElement(0, 3, center[0]);
-        matrix->SetElement(1, 3, center[1]);
-        matrix->SetElement(2, 3, center[2]);
-        interactor->Render();
-        }
-#endif
-      if (style)  { style->OnMouseMove(); 
+		  else if (mUserIsAnnotating && mNoteMode == POLYGONNOTE)
+		  {
+			  drawPolygonNote();
+		  }
 	  }
-      }
-	else if (event == vtkCommand::SelectionChangedEvent)
-	{
-		//qDebug()<<"Selection Changes";
-		unsigned int* rect = reinterpret_cast<unsigned int*> ( callData );
-		if (mUserIsAnnotating && rect[0] != rect[2] && rect[1] != rect[3] && mNoteMode == SURFACENOTE)
-        {
-            drawSurfaceNote(rect);
-        }
-	}
-	// end of else if
+	  else if (event == vtkCommand::RightButtonReleaseEvent)
+	  {
+		  //        if (style)  { style->OnRightButtonUp(); }
+	  }
+	  else if (event == vtkCommand::MiddleButtonPressEvent)
+	  {
+		  if (style)  { style->OnMiddleButtonDown(); }
+	  }
+	  else if (event == vtkCommand::MiddleButtonReleaseEvent)
+	  {
+		  if (style)  { style->OnMiddleButtonUp(); }
+	  }
+	  else if (event == vtkCommand::MouseWheelForwardEvent)
+	  {
+		  if (style)  { style->OnMouseWheelForward(); }
+	  }
+	  else if (event == vtkCommand::MouseWheelBackwardEvent)
+	  {
+		  if (style)  { style->OnMouseWheelBackward(); }
+	  }
+	  else if (event == vtkCommand::MouseMoveEvent)
+	  {
+#ifdef SUPPORT_LASTPICK
+		  if (this->Slicing)
+		  {
+			  vtkSmartPointer<vtkImageReslice> reslice = this->ImageReslice;
 
-    updateLightingPosition();// this should come first
-    interactor->Render();
-    }// end of execute
+			  // Increment slice position by deltaY of mouse
+			  int deltaY = lastPos[1] - currPos[1];
+
+			  reslice->GetOutput()->UpdateInformation();
+			  double sliceSpacing = reslice->GetOutput()->GetSpacing()[2];
+			  vtkSmartPointer<vtkMatrix4x4> matrix = reslice->GetResliceAxes();
+			  // move the center point that we are slicing through
+			  double point[4];
+			  double center[4];
+			  point[0] = 0.0;
+			  point[1] = 0.0;
+			  point[2] = sliceSpacing * deltaY;
+			  point[3] = 1.0;
+			  matrix->MultiplyPoint(point, center);
+			  matrix->SetElement(0, 3, center[0]);
+			  matrix->SetElement(1, 3, center[1]);
+			  matrix->SetElement(2, 3, center[2]);
+			  interactor->Render();
+		  }
+#endif
+		  if (style)  { style->OnMouseMove(); }
+	  }
+	  else if (event == vtkCommand::SelectionChangedEvent)
+	  {
+		  //qDebug()<<"Selection Changes";
+		  unsigned int* rect = reinterpret_cast<unsigned int*> ( callData );
+		  if (mUserIsAnnotating && rect[0] != rect[2] && rect[1] != rect[3] && mNoteMode == SURFACENOTE)
+		  {
+			  drawSurfaceNote(rect);
+		  }
+	  }
+	  // end of else if
+
+	  updateLightingPosition();// this should come first
+	  interactor->Render();
+  }// end of execute
 private:
   vtkSmartPointer<QVTKInteractor>       Interactor;  // Pointer to the interactor
   vtkSmartPointer<vtkImageReslice>      ImageReslice;// Pointer to vtkImageReslice
@@ -1224,6 +1349,8 @@ private:
   NoteMode mNoteMode;
   std::vector<std::pair<double*, vtkSmartPointer<vtkActor> > > mSelectedSurface;
   std::vector<std::pair<double*, vtkSmartPointer<vtkActor> > > mSelectedPoint;
+  std::vector<std::pair<int, int> > polygonPoints;
+  std::vector<std::pair<std::vector<std::pair<int, int> >*, vtkSmartPointer<vtkActor> > > mSelectedPolygon;
   int mPointNoteHighlight;
   int mSurfaceNoteHighlight;
   double mRadius;
