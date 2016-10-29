@@ -1250,7 +1250,8 @@ public:
 		  //        if (style)  { style->OnRightButtonDown(); }
 		  if (mUserIsAnnotating && mNoteMode == POINTNOTE)
 		  {
-			  drawPointNote();
+			  //drawPointNote();
+			  drawPolygonNote();
 		  }
 		  else if (mUserIsAnnotating && mNoteMode == POLYGONNOTE)
 		  {

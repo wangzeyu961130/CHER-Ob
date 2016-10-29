@@ -426,4 +426,65 @@ int SurfaceNote2D::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     return _id;
 }
+static const uint qt_meta_data_PolygonNote2D[] = {
+
+ // content:
+       6,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+static const char qt_meta_stringdata_PolygonNote2D[] = {
+    "PolygonNote2D\0"
+};
+
+void PolygonNote2D::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+const QMetaObjectExtraData PolygonNote2D::staticMetaObjectExtraData = {
+    0,  qt_static_metacall 
+};
+
+const QMetaObject PolygonNote2D::staticMetaObject = {
+    { &Note::staticMetaObject, qt_meta_stringdata_PolygonNote2D,
+      qt_meta_data_PolygonNote2D, &staticMetaObjectExtraData }
+};
+
+#ifdef Q_NO_DATA_RELOCATION
+const QMetaObject &PolygonNote2D::getStaticMetaObject() { return staticMetaObject; }
+#endif //Q_NO_DATA_RELOCATION
+
+const QMetaObject *PolygonNote2D::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
+}
+
+void *PolygonNote2D::qt_metacast(const char *_clname)
+{
+    if (!_clname) return 0;
+    if (!strcmp(_clname, qt_meta_stringdata_PolygonNote2D))
+        return static_cast<void*>(const_cast< PolygonNote2D*>(this));
+    return Note::qt_metacast(_clname);
+}
+
+int PolygonNote2D::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = Note::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    return _id;
+}
 QT_END_MOC_NAMESPACE

@@ -1416,11 +1416,345 @@ void SurfaceNote2D::removeSurfaceNote2D()
 PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<int, int> >* polygon, const int noteId, const ColorType type, const QString user)
 	: Note(noteId, type)
 {
-	//// TO BE IMPLEMETNED
+	mPath = new QString(path);
+    mPolygon = polygon;
+	mFileName = new QString(path);
+	//mFileName->append(QDir::separator() + QString("Note") + WORD_SEPARATOR + QString::number(qHash(QString::number(number))) + QString(".txt"));
+	qsrand(time(NULL));
+	int number = qrand();
+	mFileName->append(QDir::separator() + QString("PolygonNote2D") + WORD_SEPARATOR + QString::number(qHash(QString::number(number))) + QString(".txt"));
+	QString mUser = user;
+	if (user == QString())
+		mUsers.push_back(QString("Unknown"));
+	else
+	{
+		mUser.simplified();
+		mUser.replace("; ", ";");
+		mUser.replace(" ;", ";");
+		QStringList users = mUser.split(";");
+		for (int i = 0; i < users.size(); i++)
+			mUsers.push_back(users[i]);
+	}
+
+	qDebug(mFileName->toLatin1());
+	mFile = new QFile(*mFileName);
+
+	QString label;
+	// label.append(QString("Surface Note: Start (") + QString::number(point[0]) + QString(", ") + QString::number(point[1]) + QString(") End (") 
+	//	+ QString::number(point[2]) + QString(", ") + QString::number(point[3]) + QString(")"));
+	QString info(label);
+	info.append(" Image Coordinate Start (" + QString::number(polygon->front().first) + QString(", ") + QString::number(polygon->front().second) + QString(") End (") 
+		+ QString::number(polygon->back().first) + QString(", ") + QString::number(polygon->back().second) + QString(")\n"));
+	//// DO WE NEED TO PRINT ALL THE POINTS OF THIS POLYGON?
+	QString userLabel = QString("User: ");
+	QString userInfo;
+	for (int i = 0; i < mUsers.size(); i++)
+	{
+		userInfo.append(mUsers[i]);
+		if (i != mUsers.size() - 1)
+			userInfo.append(QString(";"));
+	}
+	label.append(QString("\n") + userLabel + userInfo);
+	this->setLabel(label);
+	info.append(userLabel + QString("\n") + userInfo + QString("\n"));
+	info.append(QString("Color Type:\n"));
+	info.append(QString(colortype2str(mColor).c_str()));
+	info.append(QString("\nNote Start:"));
+	this->setInfo(info);
+	qDebug() << "finish Polygon Note 2D instructor";
+	//// TO BE TESTED
 }
 PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, bool& isSucceed)
 	: Note(noteId)
 {
+/*	mPath = new QString(path);
+	mPoint = new double[3];
+	mImagePoint = new int[3];
+	vtkSmartPointer<vtkIdTypeArray> ids = vtkSmartPointer<vtkIdTypeArray>::New();
+	
+	mFileName = new QString(path);
+	mFileName->append(QDir::separator() + fileName);
+
+	qDebug(mFileName->toLatin1());
+	mFile = new QFile(*mFileName);
+    if (!mFile->open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() << "Open Note file " << this->mNoteId << " " << mFileName << " Failed"; 
+		isSucceed = false;
+		return;
+	}
+	
+    QTextStream in(mFile);
+    QString firstLine = in.readLine();
+	if (firstLine.split(" ").size() != 10)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+
+	bool ok0, ok1;
+	double pos[3];
+	pos[0] = firstLine.split(" ")[4].split(",")[0].split("(")[1].toDouble(&ok0);
+	pos[1] = firstLine.split(" ")[5].split(")")[0].toDouble(&ok1);
+	pos[2] = 0;
+	
+	if (!ok0 || !ok1)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+
+	int posImage[3];
+	posImage[0] = firstLine.split(" ")[8].split(",")[0].split("(")[1].toInt(&ok0);
+	posImage[1] = firstLine.split(" ")[9].split(")")[0].toInt(&ok1);
+	posImage[2] = 0;
+	
+	if (!ok0 || !ok1)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		mPoint[i] = pos[i];
+		mImagePoint[i] = posImage[i];
+	}
+
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("User: "))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+	QString userLine;
+	in >> userLine;
+	QStringList users = userLine.split(";");
+	for (int i = 0; i < users.size(); i++)
+		mUsers.push_back(users[i]);
+
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("Color Type:"))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+	QString colorType;
+	in >> colorType;
+
+	mColor = str2colortype(colorType.toStdString());
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("Note Start:"))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+
+	QString content = in.readAll();
+	QString text = content.split("\nLinked Images:\n")[0];
+	QString imagePaths = content.split("\nLinked Images:\n")[1];
+	QStringList imagePathList = imagePaths.split("\n");
+	QDir dir(*mPath);
+	for (int i = 0; i < imagePathList.size(); i++)
+	{
+		qDebug()<<"Image Path"<<imagePathList[i];
+		QFileInfo finfo(dir.absoluteFilePath(imagePathList[i]));
+		if (!finfo.exists())
+			continue;
+		QString extension = finfo.suffix().toLower();
+		if (extension != tr("png") && extension != tr("jpg") && extension != tr("jpeg") && extension != tr("tif") && extension != tr("bmp"))
+			continue;
+		addImage(finfo.absoluteFilePath());
+	}
+	this->setText(text);
+
+	QString label;
+	label.append(QString("Point Note: Center (") + QString::number(mPoint[0]) + QString(", ") + QString::number(mPoint[1]) + QString(")"));
+	QString info;
+	info.append(QString("Point Note: World Coordinate (") + QString::number(mPoint[0]) + QString(", ") + QString::number(mPoint[1]) + QString(") Image Coordinate (")
+		+ QString::number(mImagePoint[0]) + QString(", ") + QString::number(mImagePoint[1]) + QString(")\n"));
+	QString userLabel = QString("User: ");
+	QString userInfo;
+	for (int i = 0; i < mUsers.size(); i++)
+	{
+		userInfo.append(mUsers[i]);
+		if (i != mUsers.size() - 1)
+			userInfo.append(QString(";"));
+	}
+	label.append(QString("\n") + userLabel + userInfo);
+	this->setLabel(label);
+	info.append(userLabel + QString("\n") + userInfo + QString("\n"));
+
+	info.append(QString("Color Type:\n"));
+	info.append(colorType);
+	info.append(QString("\nNote Start:"));
+	this->setInfo(info);
+	mFile->close();
+	qDebug() << "finish Point instructor";
+	isSucceed = true;
+////
+	mPath = new QString(path);
+	mPoint = new double[4];
+	mImagePoint = new int[4];
+	vtkSmartPointer<vtkIdTypeArray> ids = vtkSmartPointer<vtkIdTypeArray>::New();
+	
+	mFileName = new QString(path);
+	mFileName->append(QDir::separator() + fileName);
+
+	qDebug(mFileName->toLatin1());
+	mFile = new QFile(*mFileName);
+    if (!mFile->open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() << "Open Note file " << this->mNoteId << " " << mFileName << " Failed"; 
+		isSucceed = false;
+		return;
+	}
+	
+    QTextStream in(mFile);
+    QString firstLine = in.readLine();
+	if (firstLine.split(" ").size() != 16)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+	bool ok0, ok1, ok2, ok3;
+	double pos[4];
+	pos[0] = firstLine.split(" ")[3].split(",")[0].split("(")[1].toDouble(&ok0);
+	pos[1] = firstLine.split(" ")[4].split(")")[0].toDouble(&ok1);
+	pos[2] = firstLine.split(" ")[6].split(",")[0].split("(")[1].toDouble(&ok2);
+	pos[3] = firstLine.split(" ")[7].split(")")[0].toDouble(&ok3);
+	
+	if (!ok0 || !ok1 || !ok2 || !ok3)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+	int posImage[4];
+	posImage[0] = firstLine.split(" ")[11].split(",")[0].split("(")[1].toInt(&ok0);
+	posImage[1] = firstLine.split(" ")[12].split(")")[0].toInt(&ok1);
+	posImage[2] = firstLine.split(" ")[14].split(",")[0].split("(")[1].toInt(&ok2);
+	posImage[3] = firstLine.split(" ")[15].split(")")[0].toInt(&ok3);
+	
+	if (!ok0 || !ok1 || !ok2 || !ok3)
+	{
+		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+		isSucceed = false;
+		return;
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		mPoint[i] = pos[i];
+		mImagePoint[i] = posImage[i];
+	}
+
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("User: "))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+	QString userLine;
+	in >> userLine;
+	QStringList users = userLine.split(";");
+	for (int i = 0; i < users.size(); i++)
+		mUsers.push_back(users[i]);
+
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("Color Type:"))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+	QString colorType;
+	in >> colorType;
+
+	mColor = str2colortype(colorType.toStdString());
+	while(!in.atEnd())
+	{
+		QString signal = in.readLine();
+		if (signal == QString("Note Start:"))
+			break;
+	}
+	if (in.atEnd())
+	{
+		isSucceed = false;
+		return;
+	}
+
+	QString content = in.readAll();
+	QString text = content.split("\nLinked Images:\n")[0];
+	QString imagePaths = content.split("\nLinked Images:\n")[1];
+	QStringList imagePathList = imagePaths.split("\n");
+	QDir dir(*mPath);
+	for (int i = 0; i < imagePathList.size(); i++)
+	{
+		qDebug()<<"Image Path"<<imagePathList[i];
+		QFileInfo finfo(dir.absoluteFilePath(imagePathList[i]));
+		if (!finfo.exists())
+			continue;
+		QString extension = finfo.suffix().toLower();
+		if (extension != tr("png") && extension != tr("jpg") && extension != tr("jpeg") && extension != tr("tif") && extension != tr("bmp"))
+			continue;
+		addImage(finfo.absoluteFilePath());
+	}
+	this->setText(text);
+
+	QString label;
+	label.append(QString("Surface Note: Start (") + QString::number(mPoint[0]) + QString(", ") + QString::number(mPoint[1]) + QString(") End (") 
+		+ QString::number(mPoint[2]) + QString(", ") + QString::number(mPoint[3]) + QString(")"));
+	this->setLabel(label);
+	QString info(label);
+	info.append(" Image Coordinate Start (" + QString::number(mImagePoint[0]) + QString(", ") + QString::number(mImagePoint[1]) + QString(") End (") 
+		+ QString::number(mImagePoint[2]) + QString(", ") + QString::number(mImagePoint[3]) + QString(")\n"));
+
+	QString userLabel = QString("User: ");
+	QString userInfo;
+	for (int i = 0; i < mUsers.size(); i++)
+	{
+		userInfo.append(mUsers[i]);
+		if (i != mUsers.size() - 1)
+			userInfo.append(QString(";"));
+	}
+	label.append(QString("\n") + userLabel + userInfo);
+	this->setLabel(label);
+	info.append(userLabel + QString("\n") + userInfo + QString("\n"));
+
+	info.append(QString("Color Type:\n"));
+	info.append(colorType);
+	info.append(QString("\nNote Start:"));
+	this->setInfo(info);
+	mFile->close();
+	qDebug() << "finish Surface instructor";
+	isSucceed = true;*/
 	//// TO BE IMPLEMENTED
 }
 void PolygonNote2D::removePolygonNote2D()

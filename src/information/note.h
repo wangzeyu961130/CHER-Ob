@@ -551,7 +551,7 @@ public:
 	/**
 	 * @brief  Get the position of the point note.
 	 */
-	std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
+	const std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
 
 	/**
 	 * @brief  Get the note id of the point note.
@@ -564,7 +564,7 @@ public:
 	void removePolygonNote2D();
 
 private:
-	std::vector<std::pair<int, int> >* mPolygon;
+	const std::vector<std::pair<int, int> >* mPolygon;
 };
 
 #endif // NOTE_H
