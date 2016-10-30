@@ -4,6 +4,7 @@
 
  - Writers:  Min H. Kim (minhkim@cs.yale.edu)
              Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -2846,13 +2847,14 @@ void MainWindow::updateMenus()
 	writeAnnotationAct->setEnabled(activeDoc);
 	pointNote->setEnabled(writeAnnotationAct->isChecked());
 	surfaceNote->setEnabled(writeAnnotationAct->isChecked());
+	polygonNote->setEnabled(writeAnnotationAct->isChecked());
 	frustumNote->setEnabled(writeAnnotationAct->isChecked());
 	colorToolButton->setEnabled(writeAnnotationAct->isChecked());
 	colorDropMenu->setEnabled(writeAnnotationAct->isChecked());
 	if (writeAnnotationAct->isChecked())
 	{
 	  this->mInformation->startAnnotation();
-	  if (!pointNote->isChecked() && !surfaceNote->isChecked() && !frustumNote->isChecked())
+	  if (!pointNote->isChecked() && !surfaceNote->isChecked() && !polygonNote->isChecked() && !frustumNote->isChecked())
 		  pointNote->setChecked(true);
 	}
 	else
@@ -2958,6 +2960,7 @@ void MainWindow::updateMenus()
 				renderToolBar->setEnabled(true);
 				measureToolBar->setEnabled(true);
 				annotationToolBar->setEnabled(true);
+				polygonNote->setEnabled(false);
 				toolsMenu->setEnabled(true);
 				viewToolBar->setEnabled(true);
 
@@ -2983,6 +2986,7 @@ void MainWindow::updateMenus()
 				measureDistanceAct->setEnabled(false);
 				removeDistanceAct->setEnabled(false);
 				viewToolBar->setEnabled(false);
+				polygonNote->setEnabled(false);
 				frustumNote->setEnabled(false);
 				break;
 			case CTVOLUME:
@@ -2995,6 +2999,7 @@ void MainWindow::updateMenus()
 				annotationModeMenu->setEnabled(true);
 				toolsMenu->setEnabled(true);
 				viewToolBar->setEnabled(false);
+				polygonNote->setEnabled(false);
 				frustumNote->setEnabled(false);
 
 				// DT: preventing crash when these buttons are clicked w/ no texture
@@ -4002,10 +4007,13 @@ void MainWindow::createActions()
 	pointNote->setCheckable(true);
     surfaceNote = new QAction(QIcon(":/images/surface.png"), tr("Surface Note"), annotationModeGroupAct);
 	surfaceNote->setCheckable(true);
+    polygonNote = new QAction(QIcon(":/images/polygon.png"), tr("Polygon Note"), annotationModeGroupAct);
+	polygonNote->setCheckable(true);
     frustumNote	= new QAction(QIcon(":/images/frustum.png"), tr("Frustum Note"), annotationModeGroupAct);
 	frustumNote->setCheckable(true);
     connect(pointNote, SIGNAL(triggered()), this, SLOT(writePointNote()));
     connect(surfaceNote, SIGNAL(triggered()), this, SLOT(writeSurfaceNote()));
+    connect(polygonNote, SIGNAL(triggered()), this, SLOT(writePolygonNote()));
     connect(frustumNote, SIGNAL(triggered()), this, SLOT(writeFrustumNote()));
 
 	annotationColorGroupAct =  new QActionGroup(this);	annotationColorGroupAct->setExclusive(true);
@@ -4285,6 +4293,7 @@ void MainWindow::createToolBars()
 	annotationToolBar->addAction(writeAnnotationAct);
 	annotationToolBar->addAction(pointNote);
 	annotationToolBar->addAction(surfaceNote);
+	annotationToolBar->addAction(polygonNote);
 	annotationToolBar->addAction(frustumNote);
 
 	colorDropMenu = new QMenu();
@@ -4491,7 +4500,7 @@ void MainWindow::createClassifiedInfoDockWindows()
 		delete mClassifiedInfoTab;
 	mClassifiedInfoTab = new ProjectClassifiedInfoTab(currentProjectFullName, mUserName);
 	rightTab->setUpdatesEnabled(false);
-	rightTab->addTab(mClassifiedInfoTab, tr("Classified Info"));
+	rightTab->addTab(mClassifiedInfoTab, tr("Categorized Info"));
 	rightTab->setUpdatesEnabled(true);
 }
 
@@ -4633,6 +4642,7 @@ void MainWindow::writePointNote()
 	}
 	pointNote->setChecked(true);
 	surfaceNote->setChecked(false);
+	polygonNote->setChecked(false);
 	frustumNote->setChecked(false);
 }
 
@@ -4647,6 +4657,22 @@ void MainWindow::writeSurfaceNote()
 	}
 	pointNote->setChecked(false);
 	surfaceNote->setChecked(true);
+	polygonNote->setChecked(false);
+	frustumNote->setChecked(false);
+}
+
+void MainWindow::writePolygonNote() 
+{
+	if (writeAnnotationAct->isChecked())
+		VTKA()->annotate(true, POLYGONNOTE, false); 
+	else
+	{
+		VTKA()->annotate(true, POLYGONNOTE); 
+		writeAnnotationAct->setChecked(true);
+	}
+	pointNote->setChecked(false);
+	surfaceNote->setChecked(false);
+	polygonNote->setChecked(true);
 	frustumNote->setChecked(false);
 }
 
@@ -4661,6 +4687,7 @@ void MainWindow::writeFrustumNote()
 	}
 	pointNote->setChecked(false);
 	surfaceNote->setChecked(false);
+	polygonNote->setChecked(false);
 	frustumNote->setChecked(true);
 }
 

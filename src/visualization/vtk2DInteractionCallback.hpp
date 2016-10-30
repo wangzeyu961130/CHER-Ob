@@ -130,6 +130,7 @@ public:
 	this->mColor = YELLOW;
 	this->mPointNoteHighlight = -1;
     this->mSurfaceNoteHighlight = -1;
+    this->mPolygonNoteHighlight = -1;
   }
 
   ~vtk2DInteractionCallback() {
@@ -605,7 +606,7 @@ public:
   void highlightPointNote(int id)
   {
 	  double* color = new double[3];
-	  if (mPointNoteHighlight != -1 || mSurfaceNoteHighlight != -1)
+	  if (mPointNoteHighlight != -1 || mSurfaceNoteHighlight != -1 || mPolygonNoteHighlight != -1)
 	  {
 		  //turnoffHighlight();
 	  }
@@ -617,7 +618,7 @@ public:
   void highlightSurfaceNote(int id)
   {
 	  double* color = new double[3];
-	  if (mPointNoteHighlight != -1 || mSurfaceNoteHighlight != -1)
+	  if (mPointNoteHighlight != -1 || mSurfaceNoteHighlight != -1 || mPolygonNoteHighlight != -1)
 	  {
 		  //turnoffHighlight();
 	  }
@@ -628,7 +629,15 @@ public:
 
   void highlightPolygonNote(int id)
   {
-	  //// TO BE IMPLEMENTED
+	  double* color = new double[3];
+	  if (mPointNoteHighlight != -1 || mSurfaceNoteHighlight != -1 || mPolygonNoteHighlight != -1)
+	  {
+		  //turnoffHighlight();
+	  }
+	  mPolygonNoteHighlight = id;
+	  mSelectedPolygon[mPolygonNoteHighlight].second->GetProperty()->GetColor(color);
+	  mSelectedPolygon[mPolygonNoteHighlight].second->GetProperty()->SetColor(1-color[0], 1-color[1], 1-color[2]);
+	  //// TO BE TESTED
   }
 
   void turnoffHighlight()
@@ -646,7 +655,12 @@ public:
 		   mSelectedSurface[mSurfaceNoteHighlight].second->GetProperty()->SetColor(1-color[0], 1-color[1], 1-color[2]);		  
 		   mSurfaceNoteHighlight = -1;		  
 	   }
-	   //// HOW TO TURN OFF HIGHLIGHT FOR POLYGON NOTES?
+	   if (mPolygonNoteHighlight != -1 && mPolygonNoteHighlight < mSelectedSurface.size()) 
+	   {
+		   mSelectedPolygon[mPolygonNoteHighlight].second->GetProperty()->GetColor(color);		 
+		   mSelectedPolygon[mPolygonNoteHighlight].second->GetProperty()->SetColor(1-color[0], 1-color[1], 1-color[2]);		  
+		   mPolygonNoteHighlight = -1;		  
+	   } //// TO BE TESTED
   }
 
   bool choosePointNote()
@@ -728,6 +742,40 @@ public:
 
   bool choosePolygonNote()
   {
+	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+      vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+
+	  int currPos[2]; 
+      interactor->GetEventPosition(currPos);
+      vtkSmartPointer<vtkCellPicker> picker = vtkSmartPointer<vtkCellPicker>::New();
+      picker->SetTolerance(0.0005);
+
+      picker->Pick(currPos[0], currPos[1], 0, interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer());
+
+      if (picker->GetCellId() != -1)
+      {
+		  double pos[3];
+          picker->GetPickPosition(pos);
+		  if(!mw()->mInformation) return false;
+		  for (int i = 0; i < mSelectedPolygon.size(); i++)
+		  {
+			  if (!mSelectedPolygon[i].second->GetVisibility())
+				  continue;
+			  ////
+			  /*const double* center = mSelectedPoint[i].first;
+			  double distant = sqrt(pow(center[0] - pos[0], 2) + pow(center[1] - pos[1],2));
+			  //qDebug()<<"radius = "<<mRadius<<" distant = "<<distant;
+			  if (distant <= mRadius)
+			  {
+				  //qDebug() << "found Point Note!!";
+				  //highlightPointNote(i);
+				  mw()->mInformation->openPointNote2D(mSelectedPoint[i].first);
+				  return true;
+			  }*/
+			  ////
+		  }
+	  }
+	  return false;
 	  //// TO BE IMPLEMENTED
   }
 
@@ -754,7 +802,7 @@ public:
 			  break;
 		  }
 	  }
-	  if (!erase)	qDebug() << "Cannot Find the Exact PointNote to remove!"<<endl;
+	  if (!erase)	qDebug() << "Cannot Find the Exact PointNote to remove!" << endl;
   }
 
   void removeSurfaceNoteMark(double* point)
@@ -781,11 +829,35 @@ public:
 			  break;
 		  }
 	  }
-	  if (!erase)	qDebug() << "Cannot Find the Exact SurfaceNote to remove!"<<endl;
+	  if (!erase)	qDebug() << "Cannot Find the Exact SurfaceNote to remove!" << endl;
   }
 
   void removePolygonNoteMark(double* point)
   {
+	  bool erase = false;
+	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
+	  {
+		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+		  bool isSame = true;
+		  ////
+		  /*for (int j = 0; j < 3; j++)
+		  {
+			  if (select[j] != point[j])
+			  {
+				  isSame = false;
+				  break;
+			  }
+		  }*/
+		  ////
+		  if (isSame)
+		  {
+			  mSelectedPolygon[i].second->VisibilityOff();
+			  mSelectedPolygon.erase(mSelectedPolygon.begin() + i);
+			  erase = true;
+			  break;
+		  }
+	  }
+	  if (!erase)	qDebug() << "Cannot Find the Exact PolygonNote to remove!" << endl;
 	  //// TO BE IMPLEMENTED
   }
 
@@ -835,6 +907,26 @@ public:
 
   void openPolygonNoteMark(double* point)
   {
+	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
+	  {
+		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+		  bool isSame = true;
+		  ////
+		  /*for (int j = 0; j < 3; j++)
+		  {
+			  if (select[j] != point[j])
+			  {
+				  isSame = false;
+				  break;
+			  }
+		  }*/
+		  ////
+		  if (isSame)
+		  {
+			  mSelectedPolygon[i].second->VisibilityOn();
+			  break;
+		  }
+	  }
 	  //// TO BE IMPLEMENTED
   }
 
@@ -886,8 +978,28 @@ public:
  
   }
 
-  void displayLoadPolygonNote(double* point, const ColorType color, bool idDisplay = false)
+  void displayLoadPolygonNote(double* point, const ColorType color, bool isDisplay = false)
   {
+	  ////
+	  /*vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
+	  vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+      vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+	  actor->SetMapper(mapper);
+	  actor->PickableOff();
+	  actor->GetProperty()->LightingOn();
+      actor->GetProperty()->SetColor(ColorPixel[color][0], ColorPixel[color][1], ColorPixel[color][2]);
+      actor->GetProperty()->SetLineWidth(2);
+      if (isDisplay)
+		  actor->VisibilityOn();
+	  else
+		  actor->VisibilityOff();
+
+      renderer->AddActor(actor);
+	  mSelectedPoint.push_back(std::make_pair(point, actor));
+
+	  displayPointNote(mapper, point);*/
+	  ////
 	  //// TO BE IMPLEMENTED
   }
 
@@ -1250,8 +1362,7 @@ public:
 		  //        if (style)  { style->OnRightButtonDown(); }
 		  if (mUserIsAnnotating && mNoteMode == POINTNOTE)
 		  {
-			  //drawPointNote();
-			  drawPolygonNote();
+			  drawPointNote();
 		  }
 		  else if (mUserIsAnnotating && mNoteMode == POLYGONNOTE)
 		  {
@@ -1354,6 +1465,7 @@ private:
   std::vector<std::pair<std::vector<std::pair<int, int> >*, vtkSmartPointer<vtkActor> > > mSelectedPolygon;
   int mPointNoteHighlight;
   int mSurfaceNoteHighlight;
+  int mPolygonNoteHighlight;
   double mRadius;
   ColorType mColor;
 };

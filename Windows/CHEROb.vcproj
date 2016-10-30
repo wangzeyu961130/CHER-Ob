@@ -5566,6 +5566,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\images\polygon.png"
+				>
+			</File>
+			<File
 				RelativePath="..\images\polygonarrow.png"
 				>
 			</File>
