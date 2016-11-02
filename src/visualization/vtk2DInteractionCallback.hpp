@@ -821,7 +821,7 @@ public:
 	  if (!erase)	qDebug() << "Cannot Find the Exact PointNote to remove!" << endl;
   }
 
-  void removeSurfaceNoteMark(double* surface)
+  void removeSurfaceNoteMark(double* point)
   {
 	  qDebug()<<"in remove surface note mark";
 	  bool erase = false;
@@ -831,7 +831,7 @@ public:
 		  bool isSame = true;
 		  for (int j = 0; j  < 4; j++)
 		  {
-			  if (select[j] != surface[j])
+			  if (select[j] != point[j])
 			  {
 				  isSame = false;
 				  break;
@@ -898,7 +898,7 @@ public:
 	  }
   }
 
-  void openSurfaceNoteMark(double* surface)
+  void openSurfaceNoteMark(double* point)
   {
 	  for (int i = 0; i < mSelectedSurface.size(); ++i) 
 	  {
@@ -906,7 +906,7 @@ public:
 		  bool isSame = true;
 		  for (int j = 0; j  < 4; j++)
 		  {
-			  if (select[j] != surface[j])
+			  if (select[j] != point[j])
 			  {
 				  isSame = false;
 				  break;
@@ -966,7 +966,7 @@ public:
 	  displayPointNote(mapper, point);
   }
 
-  void displayLoadSurfaceNote(double* surface, const ColorType color, bool isDisplay = false)
+  void displayLoadSurfaceNote(double* point, const ColorType color, bool isDisplay = false)
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
@@ -986,9 +986,9 @@ public:
 
       renderer->AddActor(actor);
 
-	  mSelectedSurface.push_back(std::make_pair(surface, actor));
+	  mSelectedSurface.push_back(std::make_pair(point, actor));
 
-	  displaySurfaceNote(mapper, surface);
+	  displaySurfaceNote(mapper, point);
  
   }
 

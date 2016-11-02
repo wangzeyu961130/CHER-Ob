@@ -181,7 +181,7 @@ void Note::updateInfo()
 void Note::updateLabel()
 {
 	QString label = mLabel->text();
-	int start = label.indexOf("User:");
+	int start = label.indexOf("User: ");
 	if (start == -1)
 		return;
 	label = label.left(start+6);
@@ -296,7 +296,7 @@ PointNote::PointNote(QString path, double* pos, const int cellId, const int note
 	QString info(label);
 	info.append(QString(" Coordinates (") + QString::number(mPosition[0]) + QString(", ") + QString::number(mPosition[1])
 		+ QString(", ") + QString::number(mPosition[2]) + QString(")\n"));
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -356,7 +356,7 @@ PointNote::PointNote(QString path, QString fileName, const int noteId, bool& isS
 	while(!in.atEnd())
 	{
 		QString signal = in.readLine();
-		if (signal == QString("User:"))
+		if (signal == QString("User: "))
 			break;
 	}
 	if (in.atEnd())
@@ -421,7 +421,7 @@ PointNote::PointNote(QString path, QString fileName, const int noteId, bool& isS
 	QString info(label);
 	info.append(QString(" Coordinates (") + QString::number(mPosition[0]) + QString(", ") + QString::number(mPosition[1])
 		+ QString(", ") + QString::number(mPosition[2]) + QString(")\n"));
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -514,7 +514,7 @@ SurfaceNote::SurfaceNote(QString path, vtkSmartPointer<vtkSelectionNode> cellIds
 				info.append(QString("\n"));
 		}
 	}
-	QString userLabel= QString("User:");
+	QString userLabel= QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -628,7 +628,7 @@ SurfaceNote::SurfaceNote(QString path, QString fileName, const int noteId, bool&
 	while(!in.atEnd())
 	{
 		QString signal = in.readLine();
-		if (signal == QString("User:"))
+		if (signal == QString("User: "))
 			break;
 	}
 	if (in.atEnd())
@@ -705,7 +705,7 @@ SurfaceNote::SurfaceNote(QString path, QString fileName, const int noteId, bool&
 			info.append(QString("\n"));
 	}
 
-	QString userLabel= QString("User:");
+	QString userLabel= QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -785,7 +785,7 @@ FrustumNote::FrustumNote(QString path, vtkSmartPointer<vtkPoints> points, vtkSma
 		info.append(QString("(") + QString::number(mNormals->GetVariantValue(i*3).ToDouble()) + ", " 
 			+ QString::number(mNormals->GetVariantValue(i*3 + 1).ToDouble()) + ", " + QString::number(mNormals->GetVariantValue(i*3 + 2).ToDouble()) + ")\n");
 	}
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -890,7 +890,7 @@ FrustumNote::FrustumNote(QString path, QString fileName, const int noteId, bool&
 	while(!in.atEnd())
 	{
 		QString signal = in.readLine();
-		if (signal == QString("User:"))
+		if (signal == QString("User: "))
 			break;
 	}
 	if (in.atEnd())
@@ -965,7 +965,7 @@ FrustumNote::FrustumNote(QString path, QString fileName, const int noteId, bool&
 			+ QString::number(mNormals->GetVariantValue(i*3 + 1).ToDouble()) + ", " + QString::number(mNormals->GetVariantValue(i*3 + 2).ToDouble()) + ")\n");
 	}
 
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1028,7 +1028,7 @@ PointNote2D::PointNote2D(QString path, const double* point, const int* pointImag
 	QString info;
 	info.append(QString("Point Note: World Coordinate (") + QString::number(point[0]) + QString(", ") + QString::number(point[1]) + QString(") Image Coordinate (")
 		+ QString::number(pointImage[0]) + QString(", ") + QString::number(pointImage[1]) + QString(")\n"));
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1108,7 +1108,7 @@ PointNote2D::PointNote2D(QString path, QString fileName, const int noteId, bool&
 	while(!in.atEnd())
 	{
 		QString signal = in.readLine();
-		if (signal == QString("User:"))
+		if (signal == QString("User: "))
 			break;
 	}
 	if (in.atEnd())
@@ -1172,7 +1172,7 @@ PointNote2D::PointNote2D(QString path, QString fileName, const int noteId, bool&
 	QString info;
 	info.append(QString("Point Note: World Coordinate (") + QString::number(mPoint[0]) + QString(", ") + QString::number(mPoint[1]) + QString(") Image Coordinate (")
 		+ QString::number(mImagePoint[0]) + QString(", ") + QString::number(mImagePoint[1]) + QString(")\n"));
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1238,7 +1238,7 @@ SurfaceNote2D::SurfaceNote2D(QString path, const double* point, const int* point
 	QString info(label);
 	info.append(" Image Coordinate Start (" + QString::number(pointImage[0]) + QString(", ") + QString::number(pointImage[1]) + QString(") End (") 
 		+ QString::number(pointImage[2]) + QString(", ") + QString::number(pointImage[3]) + QString(")\n"));
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1319,7 +1319,7 @@ SurfaceNote2D::SurfaceNote2D(QString path, QString fileName, const int noteId, b
 	while(!in.atEnd())
 	{
 		QString signal = in.readLine();
-		if (signal == QString("User:"))
+		if (signal == QString("User: "))
 			break;
 	}
 	if (in.atEnd())
@@ -1386,7 +1386,7 @@ SurfaceNote2D::SurfaceNote2D(QString path, QString fileName, const int noteId, b
 	info.append(" Image Coordinate Start (" + QString::number(mImagePoint[0]) + QString(", ") + QString::number(mImagePoint[1]) + QString(") End (") 
 		+ QString::number(mImagePoint[2]) + QString(", ") + QString::number(mImagePoint[3]) + QString(")\n"));
 
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1453,7 +1453,7 @@ PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<int, int>
 		mPolygon->push_back(*it);
 		info.append(QString::number(i) + " (" + QString::number(it->first) + ", " + QString::number(it->second) + ")\n");
 	}
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{
@@ -1503,7 +1503,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	while(!in.atEnd())
 	{
 		QString tmpLines = in.readLine();
-		if (tmpLines == QString("User:")) break;
+		if (tmpLines == QString("User: ")) break;
 		if (tmpLines.split(" ").size() != 3)
 		{
 			qDebug() << "The Syntax of Polygon Vertices is incorrect. The Current Line is " << tmpLines;
@@ -1584,7 +1584,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 		i++;
 		info.append(QString::number(i) + " (" + QString::number(it->first) + ", " + QString::number(it->second) + ")\n");
 	}
-	QString userLabel = QString("User:");
+	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
 	{

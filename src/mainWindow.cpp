@@ -1560,8 +1560,14 @@ void MainWindow::saveProjectAs()
 			{
 				QStringList nameElement = mvc->currentView()->mCHE.split(QDir::separator());
 				QString CHEName = nameElement[nameElement.size() - 1];
-				mvc->currentView()->mFilename = currentProjectFullName + QDir::separator() + CHEName + QDir::separator() + fi.fileName() + QDir::separator() + fi.fileName();
-				mvc->currentView()->mProjectPath = currentProjectFullName + QDir::separator() + CHEName + QDir::separator() + fi.fileName();
+				mvc->currentView()->mFilename = currentProjectFullName + QDir::separator() + /*CHEName + QDir::separator() +*/ fi.fileName() + QDir::separator() + fi.fileName();
+				mvc->currentView()->mProjectPath = currentProjectFullName + QDir::separator() + /*CHEName + QDir::separator() +*/ fi.fileName();
+				/*qDebug() << "***********************\n";
+				qDebug() << CHEName << '\n';
+				qDebug() << mvc->currentView()->mFilename << '\n';
+				qDebug() << mvc->currentView()->mProjectPath << '\n';
+				qDebug() << "***********************\n";*/
+				//// Modified by Zeyu Wang on Nov 2, 2016 to fix the path. Ctrl+Shift+S does NOT work!
 				w->setWindowTitle(currentProjectFullName + QString(" : ") + fi.fileName());
 				if (mvc->currentView()->isDICOM())
 				{
@@ -3757,10 +3763,10 @@ void MainWindow::createActions()
 	saveAct->setStatusTip(tr("Save the Project/Cultural Heritage Entity"));
 	connect(saveAct, SIGNAL(triggered()), this, SLOT(save()));
 
-	saveAsAct = new QAction(QIcon(":/images/save_project.png"),tr("Save As..."), this);
-	saveAsAct->setStatusTip(tr("Save the Project/Cultural Heritage Entity as a new one"));
+	saveAsAct = new QAction(QIcon(":/images/save_project.png"), tr("Save As..."), this);
 	saveAsAct->setShortcutContext(Qt::ApplicationShortcut);
 	saveAsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
+	saveAsAct->setStatusTip(tr("Save the Project/Cultural Heritage Entity as a new one"));
 	connect(saveAsAct, SIGNAL(triggered()), this, SLOT(saveAs()));
 
 	closeAct = new QAction(tr("Close"), this);
@@ -4050,7 +4056,7 @@ void MainWindow::createActions()
 
     screenshotAct = new QAction (QIcon(":/images/snapshot.png"), tr("Screenshot"), this);
     screenshotAct->setShortcutContext(Qt::ApplicationShortcut);
-    screenshotAct->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_S);
+    screenshotAct->setShortcut(Qt::CTRL+Qt::Key_R); //// Modified by Zeyu Wang on Nov 2, 2016 to resolve conflict with Save As...
     screenshotAct->setCheckable(false);
     connect(screenshotAct, SIGNAL(triggered()), this, SLOT(takeScreenshot()));
 

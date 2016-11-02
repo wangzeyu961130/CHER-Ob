@@ -260,7 +260,7 @@ public:
 	 * @brief  Open 2D point notes with location info.
 	 * @param  point  Point position in world coordinate.
 	 */
-	void openPointNote2D(double* surface);
+	void openPointNote2D(double* point);
 
 	/**
 	 * @brief  Open 2D surface notes with location info.

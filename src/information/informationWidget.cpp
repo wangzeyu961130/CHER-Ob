@@ -885,7 +885,7 @@ void Information::openPointNote2D(double* point)
 	}
 }
 
-void Information::openSurfaceNote2D(double* surface)
+void Information::openSurfaceNote2D(double* point)
 {
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes2D[notePath].size(); ++i) 
@@ -894,7 +894,7 @@ void Information::openSurfaceNote2D(double* surface)
 		bool isSame = true;
 		for (int j = 0; j  < 4; j++)
 		{
-			if (select[j] != surface[j])
+			if (select[j] != point[j])
 			{
 				isSame = false;
 				break;
