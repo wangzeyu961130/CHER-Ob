@@ -295,6 +295,11 @@ public slots:
   void removePointNote2DMark(double* point);
   void openPointNote2DMark(double* point);
   void loadPointNote2DMark(double* point, const ColorType color, bool isDisplay = false);
+  ////
+  void removePolygonNote2DMark(double* point);
+  void openPolygonNote2DMark(double* point);
+  void loadPolygonNote2DMark(double* point, const ColorType color, bool isDisplay = false);
+  //// TO BE IMPLEMENTED
 
 protected slots:
   void updateIntensityL12(double intensity1, double intensity2);

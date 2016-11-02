@@ -4,6 +4,7 @@
 
  - Writers:  Min H. Kim (minhkim@cs.yale.edu)
  			 Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -225,6 +226,7 @@ void Information::init(const QString path, bool isDisplayNoteMark)
 	loadFrustumNote(objectPath, true, isDisplayNoteMark);
 	loadPointNote2D(objectPath, true, isDisplayNoteMark);
 	loadSurfaceNote2D(objectPath, true, isDisplayNoteMark);
+	loadPolygonNote2D(objectPath, true, isDisplayNoteMark);
 	loadAnnotation(notePath);
 }
 
@@ -235,6 +237,7 @@ void Information::initCT2DRendering(const QString path, bool isDisplayNoteMark)
 	notePath.append(QDir::separator() + QString("Note"));
 	loadPointNote2D(objectPath, true, isDisplayNoteMark);
 	loadSurfaceNote2D(objectPath, true, isDisplayNoteMark);
+	loadPolygonNote2D(objectPath, true, isDisplayNoteMark);
 	loadPointNote(objectPath, false);
 	loadSurfaceNote(objectPath, false);
 	loadFrustumNote(objectPath, false);
@@ -248,6 +251,7 @@ void Information::initCTVolumeRendering(const QString path, bool isDisplayNoteMa
 	notePath.append(QDir::separator() + QString("Note"));
 	loadPointNote2D(objectPath, false);
 	loadSurfaceNote2D(objectPath, false);
+	loadPolygonNote2D(objectPath, false);
 	loadPointNote(objectPath, true, isDisplayNoteMark);
 	loadSurfaceNote(objectPath, true, isDisplayNoteMark);
 	loadFrustumNote(objectPath, true, isDisplayNoteMark);
@@ -685,6 +689,54 @@ bool Information::loadSurfaceNote2D(const QString path, bool isLoadNoteMark, boo
 	return isLoadSucceed;
 }
 
+bool Information::loadPolygonNote2D(const QString path, bool isLoadNoteMark, bool isDisplayNoteMark)
+{
+	QDir dir(notePath);
+	dir.setNameFilters(QStringList()<<"PolygonNote2D_*.txt");
+	dir.setSorting(QDir::Name|QDir::LocaleAware);
+	QStringList fileList = dir.entryList();
+	bool isLoadSucceed = true;
+	bool isSucceed;
+	for (int i = 0; i < fileList.size(); ++i)
+	{
+		qDebug() << fileList[i];
+		bool duplicated = false;
+		for (int j = 0; j < mPolygonNotes2D[notePath].size(); j++)
+		{
+			QString file = mPolygonNotes2D[notePath][j]->getFileName();
+			file.truncate(file.lastIndexOf(QDir::separator()));
+			if (file == fileList[i])
+			{
+				duplicated = true;
+				break;
+			}
+		}
+		if (duplicated)
+			continue;
+		PolygonNote2D* newNote = new PolygonNote2D(notePath, fileList[i], i, isSucceed);
+		if (!isSucceed)
+		{
+			isLoadSucceed = false;
+			continue;
+		}
+		mPolygonNotes2D[notePath].push_back(newNote);
+		connect(mPolygonNotes2D[notePath][i], SIGNAL(removeNote(int, QString*)), this, SLOT(removePolygonNote2D(int, QString*)));
+		connect(this, SIGNAL(saveAll()), mPolygonNotes2D[notePath][i], SLOT(save()));
+		connect(this, SIGNAL(closeAll()), mPolygonNotes2D[notePath][i], SLOT(close()));
+		connect(this, SIGNAL(replaceUserName(const QString, const QString)), mPolygonNotes2D[notePath][i], SLOT(replaceUserName(const QString, const QString)));
+		mPolygonNotes2D[notePath][i]->setSaved(true);
+		if (mw()->VTKA(path) && isLoadNoteMark)
+			mw()->VTKA(path)->loadPolygonNote2DMark(newNote->getPolygon(), newNote->getColorType(), isDisplayNoteMark);
+		//else
+		//	qDebug()<<"Cannot find the window!!!!";
+
+	}
+	qDebug() << "Load "<<mPolygonNotes2D[notePath].size()<<" Polygon Note";
+	return isLoadSucceed;
+
+	//// TO BE TESETED
+}
+
 void Information::openPointNote(int cellId)
 {
 	updateCurrentPath();
@@ -833,7 +885,7 @@ void Information::openPointNote2D(double* point)
 	}
 }
 
-void Information::openSurfaceNote2D(double* point)
+void Information::openSurfaceNote2D(double* surface)
 {
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes2D[notePath].size(); ++i) 
@@ -842,7 +894,7 @@ void Information::openSurfaceNote2D(double* point)
 		bool isSame = true;
 		for (int j = 0; j  < 4; j++)
 		{
-			if (select[j] != point[j])
+			if (select[j] != surface[j])
 			{
 				isSame = false;
 				break;
@@ -855,6 +907,33 @@ void Information::openSurfaceNote2D(double* point)
 			break;
 		}
 	}
+}
+
+void Information::openPolygonNote2D(std::vector<std::pair<int, int> >* polygon)
+{
+	////
+	updateCurrentPath();
+	for (int i = 0; i < mPolygonNotes2D[notePath].size(); ++i) 
+	{
+		const std::vector<std::pair<int, int> >* select = mPolygonNotes2D[notePath][i]->getPolygon();
+		bool isSame = true;
+		std::vector<std::pair<int, int> >::const_iterator it1, it2;
+		for (it1 = select->begin(), it2 = polygon->begin(); it1 = select->end(), it2 != polygon->end(); ++it1, ++it2)
+		{
+			if (it1->first != it2->first || it1->second != it2->second)
+			{
+				isSame = false;
+				break;
+			}
+		}
+		if (isSame)
+		{
+			mPolygonNotes2D[notePath][i]->hideNote();
+			mPolygonNotes2D[notePath][i]->showNote();
+			break;
+		}
+	}
+	//// TO BE TESTED
 }
 
 void Information::removePointNote(int noteId, QString* path)

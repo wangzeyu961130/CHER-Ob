@@ -564,7 +564,7 @@ public:
 	void removePolygonNote2D();
 
 private:
-	const std::vector<std::pair<int, int> >* mPolygon;
+	std::vector<std::pair<int, int> >* mPolygon;
 };
 
 #endif // NOTE_H

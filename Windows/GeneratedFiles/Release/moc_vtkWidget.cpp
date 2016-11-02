@@ -22,7 +22,7 @@ static const uint qt_meta_data_VtkWidget[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      46,   14, // methods
+      50,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,10 +74,14 @@ static const uint qt_meta_data_VtkWidget[] = {
     2265, 2043,   10,   10, 0x0a,
     2294, 2113,   10,   10, 0x0a,
     2338, 2181,   10,   10, 0x2a,
-    2399, 2377,   10,   10, 0x09,
-    2437, 2433,   10,   10, 0x09,
-    2497, 2489,   10,   10, 0x09,
-    2579, 2520,   10,   10, 0x0a,
+    2377, 2043,   10,   10, 0x0a,
+    2410, 2043,   10,   10, 0x0a,
+    2441, 2113,   10,   10, 0x0a,
+    2487, 2181,   10,   10, 0x2a,
+    2550, 2528,   10,   10, 0x09,
+    2588, 2584,   10,   10, 0x09,
+    2648, 2640,   10,   10, 0x09,
+    2730, 2671,   10,   10, 0x0a,
 
        0        // eod
 };
@@ -147,6 +151,10 @@ static const char qt_meta_stringdata_VtkWidget[] = {
     "openPointNote2DMark(double*)\0"
     "loadPointNote2DMark(double*,ColorType,bool)\0"
     "loadPointNote2DMark(double*,ColorType)\0"
+    "removePolygonNote2DMark(double*)\0"
+    "openPolygonNote2DMark(double*)\0"
+    "loadPolygonNote2DMark(double*,ColorType,bool)\0"
+    "loadPolygonNote2DMark(double*,ColorType)\0"
     "intensity1,intensity2\0"
     "updateIntensityL12(double,double)\0,,,\0"
     "getHyperPixelsSignals(vtkObject*,ulong,void*,void*)\0"
@@ -203,10 +211,14 @@ void VtkWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 39: _t->openPointNote2DMark((*reinterpret_cast< double*(*)>(_a[1]))); break;
         case 40: _t->loadPointNote2DMark((*reinterpret_cast< double*(*)>(_a[1])),(*reinterpret_cast< const ColorType(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
         case 41: _t->loadPointNote2DMark((*reinterpret_cast< double*(*)>(_a[1])),(*reinterpret_cast< const ColorType(*)>(_a[2]))); break;
-        case 42: _t->updateIntensityL12((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
-        case 43: _t->getHyperPixelsSignals((*reinterpret_cast< vtkObject*(*)>(_a[1])),(*reinterpret_cast< ulong(*)>(_a[2])),(*reinterpret_cast< void*(*)>(_a[3])),(*reinterpret_cast< void*(*)>(_a[4]))); break;
-        case 44: _t->saveFileInfo((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
-        case 45: _t->updateRTIImageVTK((*reinterpret_cast< std::vector<unsigned char>(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
+        case 42: _t->removePolygonNote2DMark((*reinterpret_cast< double*(*)>(_a[1]))); break;
+        case 43: _t->openPolygonNote2DMark((*reinterpret_cast< double*(*)>(_a[1]))); break;
+        case 44: _t->loadPolygonNote2DMark((*reinterpret_cast< double*(*)>(_a[1])),(*reinterpret_cast< const ColorType(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
+        case 45: _t->loadPolygonNote2DMark((*reinterpret_cast< double*(*)>(_a[1])),(*reinterpret_cast< const ColorType(*)>(_a[2]))); break;
+        case 46: _t->updateIntensityL12((*reinterpret_cast< double(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2]))); break;
+        case 47: _t->getHyperPixelsSignals((*reinterpret_cast< vtkObject*(*)>(_a[1])),(*reinterpret_cast< ulong(*)>(_a[2])),(*reinterpret_cast< void*(*)>(_a[3])),(*reinterpret_cast< void*(*)>(_a[4]))); break;
+        case 48: _t->saveFileInfo((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 49: _t->updateRTIImageVTK((*reinterpret_cast< std::vector<unsigned char>(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
         default: ;
         }
     }
@@ -244,9 +256,9 @@ int VtkWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 46)
+        if (_id < 50)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 46;
+        _id -= 50;
     }
     return _id;
 }

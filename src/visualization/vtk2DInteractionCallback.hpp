@@ -455,12 +455,18 @@ public:
 	  picker->SetTolerance(0.0005);
 	  picker->Pick(currPos[0], currPos[1], 0, renderer);
 
+	  qDebug() << "Break Point 1...\n";
+	  qDebug() << picker->GetCellId() << '\n';
+
 	  if (picker->GetCellId() != -1)
 	  {
 		  double* point = new double[3];
 		  picker->GetPickPosition(point);
 		  int* pointImageCoordinate = new int[3];
 		  picker->GetPointIJK(pointImageCoordinate);
+
+		  qDebug() << "Break Point 2...\n";
+		  qDebug() << pointImageCoordinate[0] << '\t' << pointImageCoordinate[1] << '\t' << pointImageCoordinate[2] << '\n';
 
 		  if(!mw()->mInformation) return;
 
@@ -471,38 +477,40 @@ public:
 
 		  PolyLine->GetPointIds()->SetNumberOfIds(polygonPoints.size());
 		  for (int i = 0; i < polygonPoints.size(); i++)
-				PolyLine->GetPointIds()->SetId(i, i);
+			  PolyLine->GetPointIds()->SetId(i, i);
 		  if (polygonPoints.size() > 2 && abs(polygonPoints.back().first - polygonPoints.front().first) < 10
-				&& abs(polygonPoints.back().second - polygonPoints.front().second) < 10)
-			{
-				PolyLine->GetPointIds()->SetId(polygonPoints.size()-1, 0);
-				std::vector<std::pair<int, int> > toSavePolygon = polygonPoints;
-				polygonPointer = &toSavePolygon;
-				polygonPoints.clear();
-				qDebug() << "Draw Polygon Note";
-			}
-		 CellArray->InsertNextCell(PolyLine);
-			PolyData->SetPoints(Points);
-			PolyData->SetLines(CellArray);
-			PolyDataMapper->SetInput(PolyData);
-			Actor->SetMapper(PolyDataMapper);
-			Actor->PickableOff();
-			Actor->GetProperty()->LightingOn();
-			Actor->GetProperty()->SetColor(0, 0, 1);
-			Actor->GetProperty()->SetLineWidth(2);
-			Actor->VisibilityOn();
-      
+			  && abs(polygonPoints.back().second - polygonPoints.front().second) < 10)
+		  {
+			  PolyLine->GetPointIds()->SetId(polygonPoints.size()-1, 0);
+			  polygonPointer = new std::vector<std::pair<int, int> >;
+			  *polygonPointer = polygonPoints;
+			  mSelectedPolygon.push_back(std::make_pair(polygonPointer, Actor));
+			  displayPolygonNote(PolyDataMapper, polygonPointer);
+			  mw()->mInformation->createPolygonNote2D(polygonPointer, mColor);
+			  polygonPoints.clear();
+			  qDebug() << "Draw Polygon Note";
+		  }
+		  CellArray->InsertNextCell(PolyLine);
+		  PolyData->SetPoints(Points);
+		  PolyData->SetLines(CellArray);
+		  PolyDataMapper->SetInput(PolyData);
+		  Actor->SetMapper(PolyDataMapper);
+		  Actor->PickableOff();
+		  Actor->GetProperty()->LightingOn();
+		  Actor->GetProperty()->SetColor(0, 0, 1);
+		  Actor->GetProperty()->SetLineWidth(2);
+		  Actor->VisibilityOn();
 		  renderer->AddActor(Actor);
-		  mSelectedPolygon.push_back(std::make_pair(polygonPointer, Actor));
-		  displayPolygonNote(PolyDataMapper, polygonPointer);
-		  mw()->mInformation->createPolygonNote2D(polygonPointer, mColor);
+
+		  qDebug() << "Break Point 3...\n";
+		  qDebug() << polygonPoints.size() << '\n';
 	  }
 	  //// TO BE TESTED
   }
   void displayPointNote(vtkSmartPointer<vtkPolyDataMapper> mapper, double* select)
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
-	  
+
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
 
 	  double p0[3] = {select[0], select[1], 0.0};
@@ -510,7 +518,7 @@ public:
 	  double p2[3] = {select[0] + mRadius, select[1], 0.0};
 	  double p3[3] = {select[0], select[1] + mRadius, 0.0};
 	  double p4[3] = {select[0], select[1] - mRadius, 0.0};
-		qDebug()<<"radius = " <<mRadius;
+	  qDebug()<<"radius = " <<mRadius;
 	  vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
 
 	  points->InsertNextPoint(p0);
@@ -520,7 +528,7 @@ public:
 	  points->InsertNextPoint(p4);
 
 	  vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
-      polyLine->GetPointIds()->SetNumberOfIds(8);
+	  polyLine->GetPointIds()->SetNumberOfIds(8);
 	  polyLine->GetPointIds()->SetId(0,0);
 	  polyLine->GetPointIds()->SetId(1,1);
 	  polyLine->GetPointIds()->SetId(2,0);
@@ -533,10 +541,10 @@ public:
 
 	  vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
 	  cells->InsertNextCell(polyLine);
- 
-      vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
-      polyData->SetPoints(points);
-      polyData->SetLines(cells);
+
+	  vtkSmartPointer<vtkPolyData> polyData = vtkSmartPointer<vtkPolyData>::New();
+	  polyData->SetPoints(points);
+	  polyData->SetLines(cells);
 	  mapper->SetInput(polyData);
   }
 
@@ -756,27 +764,35 @@ public:
       {
 		  double pos[3];
           picker->GetPickPosition(pos);
+		  int posImg[3];
+		  picker->GetPointIJK(posImg);
 		  if(!mw()->mInformation) return false;
 		  for (int i = 0; i < mSelectedPolygon.size(); i++)
 		  {
 			  if (!mSelectedPolygon[i].second->GetVisibility())
 				  continue;
-			  ////
-			  /*const double* center = mSelectedPoint[i].first;
-			  double distant = sqrt(pow(center[0] - pos[0], 2) + pow(center[1] - pos[1],2));
-			  //qDebug()<<"radius = "<<mRadius<<" distant = "<<distant;
-			  if (distant <= mRadius)
+			  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+			  int maxX = 0, maxY = 0, minX = 0xFFFF, minY = 0xFFFF;
+			  std::vector<std::pair<int, int> >::const_iterator it;
+			  for (it = select->begin(); it != select->end(); it++)
 			  {
-				  //qDebug() << "found Point Note!!";
-				  //highlightPointNote(i);
-				  mw()->mInformation->openPointNote2D(mSelectedPoint[i].first);
+				  if (it->first > maxX) maxX = it->first;
+				  if (it->first < minX) minX = it->first;
+				  if (it->second > maxY) maxY = it->second;
+				  if (it->second < minY) minY = it->second;
+			  }
+			  if (posImg[0] >= minX && posImg[0] <= maxX && posImg[1] >= minY && posImg[1] <= maxY)
+			  {
+				  //qDebug() << "found!!";
+				  //qDebug() << posImg[0] << posImg[1] << maxX << minX << maxY << minY;
+				  //highlightPolygonNote(i);
+				  mw()->mInformation->openPolygonNote2D(mSelectedPolygon[i].first);
 				  return true;
-			  }*/
-			  ////
+			  }
 		  }
 	  }
 	  return false;
-	  //// TO BE IMPLEMENTED
+	  //// TO BE TESTED
   }
 
   void removePointNoteMark(double* point)
@@ -805,7 +821,7 @@ public:
 	  if (!erase)	qDebug() << "Cannot Find the Exact PointNote to remove!" << endl;
   }
 
-  void removeSurfaceNoteMark(double* point)
+  void removeSurfaceNoteMark(double* surface)
   {
 	  qDebug()<<"in remove surface note mark";
 	  bool erase = false;
@@ -815,7 +831,7 @@ public:
 		  bool isSame = true;
 		  for (int j = 0; j  < 4; j++)
 		  {
-			  if (select[j] != point[j])
+			  if (select[j] != surface[j])
 			  {
 				  isSame = false;
 				  break;
@@ -832,23 +848,22 @@ public:
 	  if (!erase)	qDebug() << "Cannot Find the Exact SurfaceNote to remove!" << endl;
   }
 
-  void removePolygonNoteMark(double* point)
+  void removePolygonNoteMark(std::vector<std::pair<int, int> >* polygon)
   {
 	  bool erase = false;
 	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
 	  {
 		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
 		  bool isSame = true;
-		  ////
-		  /*for (int j = 0; j < 3; j++)
+		  std::vector<std::pair<int, int> >::const_iterator it1, it2;
+		  for (it1 = select->begin(), it2 = polygon->begin(); it1 != select->end(), it2 != polygon->end(); ++it1, ++it2)
 		  {
-			  if (select[j] != point[j])
+			  if (it1->first != it2->first || it1->second != it2->second)
 			  {
 				  isSame = false;
 				  break;
 			  }
-		  }*/
-		  ////
+		  }
 		  if (isSame)
 		  {
 			  mSelectedPolygon[i].second->VisibilityOff();
@@ -858,7 +873,7 @@ public:
 		  }
 	  }
 	  if (!erase)	qDebug() << "Cannot Find the Exact PolygonNote to remove!" << endl;
-	  //// TO BE IMPLEMENTED
+	  //// TO BE TESTED
   }
 
   void openPointNoteMark(double* point)
@@ -883,7 +898,7 @@ public:
 	  }
   }
 
-  void openSurfaceNoteMark(double* point)
+  void openSurfaceNoteMark(double* surface)
   {
 	  for (int i = 0; i < mSelectedSurface.size(); ++i) 
 	  {
@@ -891,7 +906,7 @@ public:
 		  bool isSame = true;
 		  for (int j = 0; j  < 4; j++)
 		  {
-			  if (select[j] != point[j])
+			  if (select[j] != surface[j])
 			  {
 				  isSame = false;
 				  break;
@@ -905,29 +920,28 @@ public:
 	  }
   }
 
-  void openPolygonNoteMark(double* point)
+  void openPolygonNoteMark(const std::vector<std::pair<int, int> >* polygon)
   {
 	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
 	  {
 		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
 		  bool isSame = true;
-		  ////
-		  /*for (int j = 0; j < 3; j++)
+		  std::vector<std::pair<int, int> >::const_iterator it1, it2;
+		  for (it1 = select->begin(), it2 = polygon->begin(); it1 != select->end(), it2 != polygon->end(); ++it1, ++it2)
 		  {
-			  if (select[j] != point[j])
+			  if (it1->first != it2->first || it1->second != it2->second)
 			  {
 				  isSame = false;
 				  break;
 			  }
-		  }*/
-		  ////
+		  }
 		  if (isSame)
 		  {
 			  mSelectedPolygon[i].second->VisibilityOn();
 			  break;
 		  }
 	  }
-	  //// TO BE IMPLEMENTED
+	  //// TO BE TESTED
   }
 
   void displayLoadPointNote(double* point, const ColorType color, bool isDisplay = false)
@@ -952,7 +966,7 @@ public:
 	  displayPointNote(mapper, point);
   }
 
-  void displayLoadSurfaceNote(double* point, const ColorType color, bool isDisplay = false)
+  void displayLoadSurfaceNote(double* surface, const ColorType color, bool isDisplay = false)
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
@@ -972,16 +986,15 @@ public:
 
       renderer->AddActor(actor);
 
-	  mSelectedSurface.push_back(std::make_pair(point, actor));
+	  mSelectedSurface.push_back(std::make_pair(surface, actor));
 
-	  displaySurfaceNote(mapper, point);
+	  displaySurfaceNote(mapper, surface);
  
   }
 
-  void displayLoadPolygonNote(double* point, const ColorType color, bool isDisplay = false)
+  void displayLoadPolygonNote(std::vector<std::pair<int, int> >* polygon, const ColorType color, bool isDisplay = false)
   {
-	  ////
-	  /*vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
+	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
 	  vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
       vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
@@ -996,11 +1009,11 @@ public:
 		  actor->VisibilityOff();
 
       renderer->AddActor(actor);
-	  mSelectedPoint.push_back(std::make_pair(point, actor));
+	  mSelectedPolygon.push_back(std::make_pair(polygon, actor));
 
-	  displayPointNote(mapper, point);*/
-	  ////
-	  //// TO BE IMPLEMENTED
+	  displayPolygonNote(mapper, polygon);
+
+	  //// TO BE TESTED
   }
 
   void updateLightingPosition() {

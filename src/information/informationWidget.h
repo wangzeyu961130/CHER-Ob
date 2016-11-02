@@ -231,7 +231,7 @@ public:
 
 	/**
 	 * @brief  Create 2D notes with location info.
-	 * @param  polygon     TO BE IMPLEMENTED
+	 * @param  polygon     The vector of a series of image coordinates, which is saved to mark the note on report.
 	 * @param  color       The color of the note.
 	 */
 	void createPolygonNote2D(std::vector<std::pair<int, int> >* polygon, ColorType color);
@@ -260,13 +260,19 @@ public:
 	 * @brief  Open 2D point notes with location info.
 	 * @param  point  Point position in world coordinate.
 	 */
-	void openPointNote2D(double* point);
+	void openPointNote2D(double* surface);
 
 	/**
 	 * @brief  Open 2D surface notes with location info.
-	 * @param  point  Four corner point positions in world coordinate.
+	 * @param  surface Four corner point positions in world coordinate.
 	 */
 	void openSurfaceNote2D(double* point);
+
+	/**
+	 * @brief  Open 2D polygon notes with location info.
+	 * @param  polygon ////
+	 */
+	void openPolygonNote2D(std::vector<std::pair<int, int> >* polygon);
 
 	/**
 	 * @brief  Open notes from the tree widget in search widget when the item is double clicked.
@@ -409,6 +415,7 @@ private:
 	bool loadFrustumNote(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
 	bool loadPointNote2D(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
 	bool loadSurfaceNote2D(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadPolygonNote2D(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
 
 	/**
 	 * @brief  Load Annotation from the absolute path.

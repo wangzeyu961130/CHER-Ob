@@ -598,6 +598,12 @@ void VtkWidget::loadSurfaceNote2DMark(double* point, const ColorType color, bool
 	mCallback2D->displayLoadSurfaceNote(point, color, isDisplay);
 }
 
+void VtkWidget::loadPolygonNote2DMark(const std::vector<std::pair<int, int> >* polygon, const ColorType color, bool isDisplay)
+{
+	mCallback2D->displayLoadPolygonNote(polygon, color, isDisplay);
+	//// TO BE TESTED
+}
+
 void VtkWidget::setMeasureDistance(bool status)
 {
   mUseRubberband = status;
