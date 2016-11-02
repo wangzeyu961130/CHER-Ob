@@ -771,9 +771,9 @@ public:
 		  {
 			  if (!mSelectedPolygon[i].second->GetVisibility())
 				  continue;
-			  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+			  std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
 			  int maxX = 0, maxY = 0, minX = 0xFFFF, minY = 0xFFFF;
-			  std::vector<std::pair<int, int> >::const_iterator it;
+			  std::vector<std::pair<int, int> >::iterator it;
 			  for (it = select->begin(); it != select->end(); it++)
 			  {
 				  if (it->first > maxX) maxX = it->first;
@@ -853,9 +853,9 @@ public:
 	  bool erase = false;
 	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
 	  {
-		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+		  std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
 		  bool isSame = true;
-		  std::vector<std::pair<int, int> >::const_iterator it1, it2;
+		  std::vector<std::pair<int, int> >::iterator it1, it2;
 		  for (it1 = select->begin(), it2 = polygon->begin(); it1 != select->end(), it2 != polygon->end(); ++it1, ++it2)
 		  {
 			  if (it1->first != it2->first || it1->second != it2->second)
@@ -920,13 +920,13 @@ public:
 	  }
   }
 
-  void openPolygonNoteMark(const std::vector<std::pair<int, int> >* polygon)
+  void openPolygonNoteMark(std::vector<std::pair<int, int> >* polygon)
   {
 	  for (int i = 0; i < mSelectedPolygon.size(); ++i) 
 	  {
-		  const std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
+		  std::vector<std::pair<int, int> >* select = mSelectedPolygon[i].first;
 		  bool isSame = true;
-		  std::vector<std::pair<int, int> >::const_iterator it1, it2;
+		  std::vector<std::pair<int, int> >::iterator it1, it2;
 		  for (it1 = select->begin(), it2 = polygon->begin(); it1 != select->end(), it2 != polygon->end(); ++it1, ++it2)
 		  {
 			  if (it1->first != it2->first || it1->second != it2->second)

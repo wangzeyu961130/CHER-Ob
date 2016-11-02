@@ -578,6 +578,12 @@ void VtkWidget::removeSurfaceNote2DMark(double* point)
 	mCallback2D->removeSurfaceNoteMark(point);
 }
 
+void VtkWidget::removePolygonNote2DMark(std::vector<std::pair<int, int> >* polygon)
+{
+	mCallback2D->removePolygonNoteMark(polygon);
+	//// TO BE TESTED
+}
+
 void VtkWidget::openPointNote2DMark(double* point)
 {
 	mCallback2D->openPointNoteMark(point);
@@ -586,6 +592,12 @@ void VtkWidget::openPointNote2DMark(double* point)
 void VtkWidget::openSurfaceNote2DMark(double* point)
 {
 	mCallback2D->openSurfaceNoteMark(point);
+}
+
+void VtkWidget::openPolygonNote2DMark(std::vector<std::pair<int, int> >* polygon)
+{
+	mCallback2D->openPolygonNoteMark(polygon);
+	//// TO BE TESTED
 }
 
 void VtkWidget::loadPointNote2DMark(double* point, const ColorType color, bool isDisplay)
@@ -598,7 +610,7 @@ void VtkWidget::loadSurfaceNote2DMark(double* point, const ColorType color, bool
 	mCallback2D->displayLoadSurfaceNote(point, color, isDisplay);
 }
 
-void VtkWidget::loadPolygonNote2DMark(const std::vector<std::pair<int, int> >* polygon, const ColorType color, bool isDisplay)
+void VtkWidget::loadPolygonNote2DMark(std::vector<std::pair<int, int> >* polygon, const ColorType color, bool isDisplay)
 {
 	mCallback2D->displayLoadPolygonNote(polygon, color, isDisplay);
 	//// TO BE TESTED

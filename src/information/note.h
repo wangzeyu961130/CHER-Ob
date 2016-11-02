@@ -551,7 +551,7 @@ public:
 	/**
 	 * @brief  Get the position of the point note.
 	 */
-	const std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
+	std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
 
 	/**
 	 * @brief  Get the note id of the point note.
