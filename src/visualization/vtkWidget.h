@@ -57,6 +57,7 @@
 #include <vtkFloatArray.h>
 #include <vtkEventQtSlotConnect.h>
 #include <vtkSelectionNode.h>
+
 //----------------------------------------------------------
 // 2D images (including DICOM CT images) are factorized by using ITK
 #include <itkImage.h>
@@ -112,8 +113,10 @@
 #define DEFAULTINTENSITYL2 (0.25)
 
 #define RENDERING_TIME_INTERVAL (250) // YY. time interval for re-rendering
+
 class vtk2DInteractionCallback;
 class vtk3DInteractionCallback;
+
 class ReadCHEROb;
 class InputImageSet;
 class Bookmark;
@@ -181,6 +184,10 @@ public:
   bool getDisplayInfoOn() const {return mDisplayInfoOn; }
   bool getUserAnnotationOn() const {return mUserIsAnnotating;}
   QString getmRgbTextureFilename() const {return mRgbTextureFilename;}
+
+  NoteMode getNoteMode2D();
+  NoteMode getNoteMode3D();
+  //// Modified by Zeyu Wang on Nov 4, 2016 to make note mode consistent when change windows
 
   void setSliceMax(int input) {mSliceMax = input;}
   void setSliceCurrent(int input) {mSliceCurrent = input;}

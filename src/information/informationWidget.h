@@ -400,6 +400,7 @@ signals:
 	void removeFrustumNote(int noteId, QString* path);
 	void removePointNote2D(int noteId, QString* path);
 	void removeSurfaceNote2D(int noteId, QString* path);
+	void removePolygonNote2D(int noteId, QString* path);
 
 private:
 

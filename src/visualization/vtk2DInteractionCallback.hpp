@@ -143,6 +143,10 @@ public:
     this->mLightTransform = NULL;
   }
 
+  NoteMode GetNoteMode() {
+	  return mNoteMode;
+  }
+
   void SetHyperImageData(vtkImageData* hypertexture)
   {
     this->mHyperImageData = hypertexture;
@@ -257,7 +261,7 @@ public:
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
       vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
-	  //// HOW TO INITIALIZE POLYGON NOTE?
+	  //// TO BE IMPLEMENTED: HOW TO INITIALIZE POLYGON NOTE?
 	  if (mNoteMode == SURFACENOTE || mNoteMode == FRUSTUMNOTE)
 	  {
 		 // vtkSmartPointer<vtkInteractorStyleRubberBandPick> style 
@@ -276,6 +280,7 @@ public:
 		  interactor->SetInteractorStyle(style);
 		  style->SetCurrentRenderer(renderer);
 	  }
+	  qDebug() << "123456789\n";
   }	
 
   void finishNote()

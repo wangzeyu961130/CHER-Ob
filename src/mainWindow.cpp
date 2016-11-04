@@ -1567,7 +1567,7 @@ void MainWindow::saveProjectAs()
 				qDebug() << mvc->currentView()->mFilename << '\n';
 				qDebug() << mvc->currentView()->mProjectPath << '\n';
 				qDebug() << "***********************\n";*/
-				//// Modified by Zeyu Wang on Nov 2, 2016 to fix the path. Ctrl+Shift+S does NOT work!
+				//// Modified by Zeyu Wang on Nov 2, 2016 to fix the path
 				w->setWindowTitle(currentProjectFullName + QString(" : ") + fi.fileName());
 				if (mvc->currentView()->isDICOM())
 				{
@@ -4633,7 +4633,50 @@ void MainWindow::writeAnnotation()
 	QAction *a = qobject_cast<QAction* >(sender());
 	bool answer = a->isChecked() ? true : false;
 	if (VTKA())
+	{
 		VTKA()->annotate(answer);
+		switch (VTKA()->getNoteMode2D())
+		{
+		case POINTNOTE:
+			pointNote->setChecked(true);
+			surfaceNote->setChecked(false);
+			polygonNote->setChecked(false);
+			break;
+		case SURFACENOTE:
+			pointNote->setChecked(false);
+			surfaceNote->setChecked(true);
+			polygonNote->setChecked(false);
+			break;
+		case POLYGONNOTE:
+			pointNote->setChecked(false);
+			surfaceNote->setChecked(false);
+			polygonNote->setChecked(true);
+			break;
+		default:
+			break;
+		}
+		switch (VTKA()->getNoteMode3D())
+		{
+		case POINTNOTE:
+			pointNote->setChecked(true);
+			surfaceNote->setChecked(false);
+			frustumNote->setChecked(false);
+			break;
+		case SURFACENOTE:
+			pointNote->setChecked(false);
+			surfaceNote->setChecked(true);
+			frustumNote->setChecked(false);
+			break;
+		case FRUSTUMNOTE:
+			pointNote->setChecked(false);
+			surfaceNote->setChecked(false);
+			frustumNote->setChecked(true);
+			break;
+		default:
+			break;
+		}
+		//// Modified by Zeyu Wang on Nov 4, 2016 to make note mode consistent when change windows
+	}
 	updateMenus();
 }
 

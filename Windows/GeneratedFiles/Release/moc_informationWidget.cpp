@@ -83,7 +83,7 @@ static const uint qt_meta_data_Information[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -106,9 +106,10 @@ static const uint qt_meta_data_Information[] = {
      400,  326,   12,   12, 0x0a,
      432,  326,   12,   12, 0x0a,
      464,  326,   12,   12, 0x0a,
-     498,   12,   12,   12, 0x08,
-     518,   12,   12,   12, 0x08,
-     535,   12,   12,   12, 0x08,
+     498,  326,   12,   12, 0x0a,
+     532,   12,   12,   12, 0x08,
+     552,   12,   12,   12, 0x08,
+     569,   12,   12,   12, 0x08,
 
        0        // eod
 };
@@ -127,6 +128,7 @@ static const char qt_meta_stringdata_Information[] = {
     "removeFrustumNote(int,QString*)\0"
     "removePointNote2D(int,QString*)\0"
     "removeSurfaceNote2D(int,QString*)\0"
+    "removePolygonNote2D(int,QString*)\0"
     "annotationChanges()\0saveAnnotation()\0"
     "removeAnnotation()\0"
 };
@@ -150,9 +152,10 @@ void Information::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 10: _t->removeFrustumNote((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString*(*)>(_a[2]))); break;
         case 11: _t->removePointNote2D((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString*(*)>(_a[2]))); break;
         case 12: _t->removeSurfaceNote2D((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString*(*)>(_a[2]))); break;
-        case 13: _t->annotationChanges(); break;
-        case 14: _t->saveAnnotation(); break;
-        case 15: _t->removeAnnotation(); break;
+        case 13: _t->removePolygonNote2D((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< QString*(*)>(_a[2]))); break;
+        case 14: _t->annotationChanges(); break;
+        case 15: _t->saveAnnotation(); break;
+        case 16: _t->removeAnnotation(); break;
         default: ;
         }
     }
@@ -190,9 +193,9 @@ int Information::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     }
     return _id;
 }
