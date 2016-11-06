@@ -206,8 +206,8 @@ VtkWidget::~VtkWidget(){
   resetStackControlOnDocks(); // update control CT panels
 }
 
-NoteMode VtkWidget::getNoteMode2D() { return mCallback2D->GetNoteMode; }
-NoteMode VtkWidget::getNoteMode3D() { return mCallback3D->GetNoteMode; } //// TO BE IMPLEMENTED & FIXED
+NoteMode VtkWidget::getNoteMode2D() const { return mCallback2D->GetNoteMode(); }
+NoteMode VtkWidget::getNoteMode3D() const { return mCallback3D->GetNoteMode(); } //// TO BE IMPLEMENTED & FIXED
 
 void VtkWidget::updateCurrentSlice(int index)
 {

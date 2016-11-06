@@ -349,6 +349,7 @@ public slots:
 	/**
 	 * @brief  Update toolbars.
 	 */
+	void updateNoteMode();
 	void updateMenus();
 
 	/**

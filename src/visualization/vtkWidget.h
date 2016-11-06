@@ -185,8 +185,8 @@ public:
   bool getUserAnnotationOn() const {return mUserIsAnnotating;}
   QString getmRgbTextureFilename() const {return mRgbTextureFilename;}
 
-  NoteMode getNoteMode2D();
-  NoteMode getNoteMode3D();
+  NoteMode getNoteMode2D() const;
+  NoteMode getNoteMode3D() const;
   //// Modified by Zeyu Wang on Nov 4, 2016 to make note mode consistent when change windows
 
   void setSliceMax(int input) {mSliceMax = input;}

@@ -22,7 +22,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-     112,   14, // methods
+     113,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -48,102 +48,103 @@ static const uint qt_meta_data_MainWindow[] = {
      677,  384,   77,   11, 0x2a,
      696,   11,   77,   11, 0x2a,
      708,   11,   11,   11, 0x0a,
-     722,   11,   11,   11, 0x0a,
-     737,   11,   11,   11, 0x0a,
-     796,  755,   11,   11, 0x0a,
-     848,   11,   11,   11, 0x08,
-     857,   11,   11,   11, 0x08,
-     867,   11,   11,   11, 0x08,
-     879,   11,   11,   11, 0x08,
-     886,   11,   11,   11, 0x08,
-     895,   11,   11,   11, 0x08,
-     910,   11,   11,   11, 0x08,
+     725,   11,   11,   11, 0x0a,
+     739,   11,   11,   11, 0x0a,
+     754,   11,   11,   11, 0x0a,
+     813,  772,   11,   11, 0x0a,
+     865,   11,   11,   11, 0x08,
+     874,   11,   11,   11, 0x08,
+     884,   11,   11,   11, 0x08,
+     896,   11,   11,   11, 0x08,
+     903,   11,   11,   11, 0x08,
+     912,   11,   11,   11, 0x08,
      927,   11,   11,   11, 0x08,
-     943,   11,   11,   11, 0x08,
+     944,   11,   11,   11, 0x08,
      960,   11,   11,   11, 0x08,
-    1046,  976,   11,   11, 0x08,
-    1154, 1145, 1140,   11, 0x08,
-    1175,   11, 1140,   11, 0x28,
-    1189,   11,   11,   11, 0x08,
-    1203,   11,   11,   11, 0x08,
-    1219,   11, 1140,   11, 0x08,
-    1234,   11,   11,   11, 0x08,
-    1250,   11,   11,   11, 0x08,
-    1262,   11,   11,   11, 0x08,
-    1282,   11,   11,   11, 0x08,
-    1334, 1291,   11,   11, 0x08,
-    1417, 1145, 1140,   11, 0x08,
-    1434,   11, 1140,   11, 0x28,
-    1444,   11,   11,   11, 0x08,
-    1454,   11,   11,   11, 0x08,
-    1466,   11, 1140,   11, 0x08,
-    1477,   11,   11,   11, 0x08,
-    1498,   11,   11,   11, 0x08,
-    1505,   11,   11,   11, 0x08,
-    1513,   11,   11,   11, 0x08,
-    1527,   11,   11,   11, 0x08,
-    1558, 1551,   11,   11, 0x08,
-    1587, 1551,   11,   11, 0x08,
-    1620,   11,   11,   11, 0x08,
-    1638,   11,   11,   11, 0x08,
-    1652,   11,   11,   11, 0x08,
-    1665,   11, 1140,   11, 0x08,
-    1687,   11, 1676,   11, 0x08,
-    1698,   11,   11,   11, 0x08,
-    1711,   11,   11,   11, 0x08,
-    1729,   11,   11,   11, 0x08,
-    1749,   11,   11,   11, 0x08,
-    1767,   11,   11,   11, 0x08,
-    1785,   11,   11,   11, 0x08,
-    1804,   11,   11,   11, 0x08,
-    1819, 1816,   11,   11, 0x08,
-    1838,   11,   11,   11, 0x08,
-    1851,   11,   11,   11, 0x08,
-    1866, 1816,   11,   11, 0x08,
-    1892, 1816,   11,   11, 0x08,
-    1920,   11,   11,   11, 0x08,
-    1935,   11,   11,   11, 0x08,
-    1953,   11,   11,   11, 0x08,
-    1969,   11,   11,   11, 0x08,
-    1990,   11,   11,   11, 0x08,
-    2006,   11,   11,   11, 0x08,
-    2028,   11,   11,   11, 0x08,
-    2048,   11,   11,   11, 0x08,
-    2069,   11,   11,   11, 0x08,
-    2091,   11,   11,   11, 0x08,
-    2109,   11,   11,   11, 0x08,
-    2133,   11,   11,   11, 0x08,
-    2149,   11,   11,   11, 0x08,
-    2163,   11,   11,   11, 0x08,
-    2178,   11,   11,   11, 0x08,
-    2194,   11,   11,   11, 0x08,
+     977,   11,   11,   11, 0x08,
+    1063,  993,   11,   11, 0x08,
+    1171, 1162, 1157,   11, 0x08,
+    1192,   11, 1157,   11, 0x28,
+    1206,   11,   11,   11, 0x08,
+    1220,   11,   11,   11, 0x08,
+    1236,   11, 1157,   11, 0x08,
+    1251,   11,   11,   11, 0x08,
+    1267,   11,   11,   11, 0x08,
+    1279,   11,   11,   11, 0x08,
+    1299,   11,   11,   11, 0x08,
+    1351, 1308,   11,   11, 0x08,
+    1434, 1162, 1157,   11, 0x08,
+    1451,   11, 1157,   11, 0x28,
+    1461,   11,   11,   11, 0x08,
+    1471,   11,   11,   11, 0x08,
+    1483,   11, 1157,   11, 0x08,
+    1494,   11,   11,   11, 0x08,
+    1515,   11,   11,   11, 0x08,
+    1522,   11,   11,   11, 0x08,
+    1530,   11,   11,   11, 0x08,
+    1544,   11,   11,   11, 0x08,
+    1575, 1568,   11,   11, 0x08,
+    1604, 1568,   11,   11, 0x08,
+    1637,   11,   11,   11, 0x08,
+    1655,   11,   11,   11, 0x08,
+    1669,   11,   11,   11, 0x08,
+    1682,   11, 1157,   11, 0x08,
+    1704,   11, 1693,   11, 0x08,
+    1715,   11,   11,   11, 0x08,
+    1728,   11,   11,   11, 0x08,
+    1746,   11,   11,   11, 0x08,
+    1766,   11,   11,   11, 0x08,
+    1784,   11,   11,   11, 0x08,
+    1802,   11,   11,   11, 0x08,
+    1821,   11,   11,   11, 0x08,
+    1836, 1833,   11,   11, 0x08,
+    1855,   11,   11,   11, 0x08,
+    1868,   11,   11,   11, 0x08,
+    1883, 1833,   11,   11, 0x08,
+    1909, 1833,   11,   11, 0x08,
+    1937,   11,   11,   11, 0x08,
+    1952,   11,   11,   11, 0x08,
+    1970,   11,   11,   11, 0x08,
+    1986,   11,   11,   11, 0x08,
+    2007,   11,   11,   11, 0x08,
+    2023,   11,   11,   11, 0x08,
+    2045,   11,   11,   11, 0x08,
+    2065,   11,   11,   11, 0x08,
+    2086,   11,   11,   11, 0x08,
+    2108,   11,   11,   11, 0x08,
+    2126,   11,   11,   11, 0x08,
+    2150,   11,   11,   11, 0x08,
+    2166,   11,   11,   11, 0x08,
+    2180,   11,   11,   11, 0x08,
+    2195,   11,   11,   11, 0x08,
     2211,   11,   11,   11, 0x08,
-    2226,   11,   11,   11, 0x08,
+    2228,   11,   11,   11, 0x08,
     2243,   11,   11,   11, 0x08,
     2260,   11,   11,   11, 0x08,
-    2278,   11,   11,   11, 0x08,
+    2277,   11,   11,   11, 0x08,
     2295,   11,   11,   11, 0x08,
-    2314,   11,   11,   11, 0x08,
-    2333,   11,   11,   11, 0x08,
-    2352,   11,   11,   11, 0x08,
-    2376,   11,   11,   11, 0x08,
-    2403,   11,   11,   11, 0x08,
-    2430,   11,   11,   11, 0x08,
-    2457,   11,   11,   11, 0x08,
-    2482,   11,   11,   11, 0x08,
-    2508,   11,   11,   11, 0x08,
-    2533,   11,   11,   11, 0x08,
-    2558,   11,   11,   11, 0x08,
-    2583,   11,   11,   11, 0x08,
-    2610,   11,   11,   11, 0x08,
-    2636,   11,   11,   11, 0x08,
-    2655,   11,   11,   11, 0x08,
-    2674,   11,   11,   11, 0x08,
+    2312,   11,   11,   11, 0x08,
+    2331,   11,   11,   11, 0x08,
+    2350,   11,   11,   11, 0x08,
+    2369,   11,   11,   11, 0x08,
+    2393,   11,   11,   11, 0x08,
+    2420,   11,   11,   11, 0x08,
+    2447,   11,   11,   11, 0x08,
+    2474,   11,   11,   11, 0x08,
+    2499,   11,   11,   11, 0x08,
+    2525,   11,   11,   11, 0x08,
+    2550,   11,   11,   11, 0x08,
+    2575,   11,   11,   11, 0x08,
+    2600,   11,   11,   11, 0x08,
+    2627,   11,   11,   11, 0x08,
+    2653,   11,   11,   11, 0x08,
+    2672,   11,   11,   11, 0x08,
     2691,   11,   11,   11, 0x08,
-    2706,   11,   11,   11, 0x08,
-    2720,   11,   11,   11, 0x08,
-    2745,   11,   11,   11, 0x08,
-    2774,   11,   11,   11, 0x08,
+    2708,   11,   11,   11, 0x08,
+    2723,   11,   11,   11, 0x08,
+    2737,   11,   11,   11, 0x08,
+    2762,   11,   11,   11, 0x08,
+    2791,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -168,8 +169,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "openDICOM(QString,QString,bool)\0"
     "openDICOM(QString,QString)\0"
     "openDICOM(QString)\0openDICOM()\0"
-    "updateMenus()\0showFileInfo()\0"
-    "showProjectInfo()\0"
+    "updateNoteMode()\0updateMenus()\0"
+    "showFileInfo()\0showProjectInfo()\0"
     "userName,keyword,affiliation,description\0"
     "projectInfoChanged(QString,QString,QString,QString)\0"
     "zoomIn()\0zoomOut()\0zoomReset()\0save()\0"
@@ -264,111 +265,112 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
             if (_a[0]) *reinterpret_cast< OPENRESULT*>(_a[0]) = _r; }  break;
         case 14: { OPENRESULT _r = _t->openDICOM();
             if (_a[0]) *reinterpret_cast< OPENRESULT*>(_a[0]) = _r; }  break;
-        case 15: _t->updateMenus(); break;
-        case 16: _t->showFileInfo(); break;
-        case 17: _t->showProjectInfo(); break;
-        case 18: _t->projectInfoChanged((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4]))); break;
-        case 19: _t->zoomIn(); break;
-        case 20: _t->zoomOut(); break;
-        case 21: _t->zoomReset(); break;
-        case 22: _t->save(); break;
-        case 23: _t->saveAs(); break;
-        case 24: _t->removeObject(); break;
-        case 25: _t->openRecentProj(); break;
-        case 26: _t->openRecentCHE(); break;
-        case 27: _t->openRecentFile(); break;
-        case 28: _t->newVtkProject(); break;
-        case 29: _t->createNewVtkProject((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const USERMODE(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7])),(*reinterpret_cast< const QString(*)>(_a[8])),(*reinterpret_cast< const QString(*)>(_a[9]))); break;
-        case 30: { bool _r = _t->openProject((*reinterpret_cast< QString(*)>(_a[1])));
+        case 15: _t->updateNoteMode(); break;
+        case 16: _t->updateMenus(); break;
+        case 17: _t->showFileInfo(); break;
+        case 18: _t->showProjectInfo(); break;
+        case 19: _t->projectInfoChanged((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4]))); break;
+        case 20: _t->zoomIn(); break;
+        case 21: _t->zoomOut(); break;
+        case 22: _t->zoomReset(); break;
+        case 23: _t->save(); break;
+        case 24: _t->saveAs(); break;
+        case 25: _t->removeObject(); break;
+        case 26: _t->openRecentProj(); break;
+        case 27: _t->openRecentCHE(); break;
+        case 28: _t->openRecentFile(); break;
+        case 29: _t->newVtkProject(); break;
+        case 30: _t->createNewVtkProject((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const USERMODE(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7])),(*reinterpret_cast< const QString(*)>(_a[8])),(*reinterpret_cast< const QString(*)>(_a[9]))); break;
+        case 31: { bool _r = _t->openProject((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 31: { bool _r = _t->openProject();
+        case 32: { bool _r = _t->openProject();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 32: _t->saveProject(); break;
-        case 33: _t->saveProjectAs(); break;
-        case 34: { bool _r = _t->closeProject();
+        case 33: _t->saveProject(); break;
+        case 34: _t->saveProjectAs(); break;
+        case 35: { bool _r = _t->closeProject();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 35: _t->importProject(); break;
-        case 36: _t->importCHE(); break;
-        case 37: _t->mergeProjectToCHE(); break;
-        case 38: _t->newCHE(); break;
-        case 39: _t->createNewCHE((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const USERMODE(*)>(_a[3])),(*reinterpret_cast< const CHEInfoBasic*(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7]))); break;
-        case 40: { bool _r = _t->openCHE((*reinterpret_cast< QString(*)>(_a[1])));
+        case 36: _t->importProject(); break;
+        case 37: _t->importCHE(); break;
+        case 38: _t->mergeProjectToCHE(); break;
+        case 39: _t->newCHE(); break;
+        case 40: _t->createNewCHE((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const USERMODE(*)>(_a[3])),(*reinterpret_cast< const CHEInfoBasic*(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5])),(*reinterpret_cast< const QString(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7]))); break;
+        case 41: { bool _r = _t->openCHE((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 41: { bool _r = _t->openCHE();
+        case 42: { bool _r = _t->openCHE();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 42: _t->saveCHE(); break;
-        case 43: _t->saveCHEAs(); break;
-        case 44: { bool _r = _t->closeCHE();
+        case 43: _t->saveCHE(); break;
+        case 44: _t->saveCHEAs(); break;
+        case 45: { bool _r = _t->closeCHE();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 45: _t->exportCHEToProject(); break;
-        case 46: _t->help(); break;
-        case 47: _t->about(); break;
-        case 48: _t->viewOptions(); break;
-        case 49: _t->switchLayoutDirection(); break;
-        case 50: _t->setActiveSubWindow((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
-        case 51: _t->wrapSetActiveSubWindow((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
-        case 52: _t->closeAllWindows(); break;
-        case 53: _t->closeWindow(); break;
-        case 54: _t->openWindow(); break;
-        case 55: { bool _r = _t->closeAll();
+        case 46: _t->exportCHEToProject(); break;
+        case 47: _t->help(); break;
+        case 48: _t->about(); break;
+        case 49: _t->viewOptions(); break;
+        case 50: _t->switchLayoutDirection(); break;
+        case 51: _t->setActiveSubWindow((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 52: _t->wrapSetActiveSubWindow((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 53: _t->closeAllWindows(); break;
+        case 54: _t->closeWindow(); break;
+        case 55: _t->openWindow(); break;
+        case 56: { bool _r = _t->closeAll();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
-        case 56: { VtkWidget* _r = _t->newImage();
+        case 57: { VtkWidget* _r = _t->newImage();
             if (_a[0]) *reinterpret_cast< VtkWidget**>(_a[0]) = _r; }  break;
-        case 57: _t->helpOnline(); break;
-        case 58: _t->showToolbarFile(); break;
-        case 59: _t->showToolbarRender(); break;
-        case 60: _t->showToolbarInfo(); break;
-        case 61: _t->showToolbarView(); break;
-        case 62: _t->updateWindowMenu(); break;
-        case 63: _t->updateXML(); break;
-        case 64: _t->setSplit((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
-        case 65: _t->setUnsplit(); break;
-        case 66: _t->setCustomize(); break;
-        case 67: _t->splitFromHandle((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
-        case 68: _t->unsplitFromHandle((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
-        case 69: _t->renderPoints(); break;
-        case 70: _t->renderWireframe(); break;
-        case 71: _t->renderSurface(); break;
-        case 72: _t->maximizeSubWindows(); break;
-        case 73: _t->renderTexture(); break;
-        case 74: _t->renderInterpolation(); break;
-        case 75: _t->renderInformation(); break;
-        case 76: _t->renderPolyIndicate(); break;
-        case 77: _t->setDirectionalLight(); break;
-        case 78: _t->measureDistance(); break;
-        case 79: _t->removeMeasureDistance(); break;
-        case 80: _t->viewFromFront(); break;
-        case 81: _t->viewFromTop(); break;
-        case 82: _t->viewFromLeft(); break;
-        case 83: _t->viewFromRight(); break;
-        case 84: _t->viewFromBottom(); break;
-        case 85: _t->viewFromBack(); break;
-        case 86: _t->viewSpinMotion(); break;
-        case 87: _t->generateReport(); break;
-        case 88: _t->writeAnnotation(); break;
-        case 89: _t->writePointNote(); break;
-        case 90: _t->writeSurfaceNote(); break;
-        case 91: _t->writePolygonNote(); break;
-        case 92: _t->writeFrustumNote(); break;
-        case 93: _t->setAnnotationColorRed(); break;
-        case 94: _t->setAnnotationColorMarron(); break;
-        case 95: _t->setAnnotationColorOrange(); break;
-        case 96: _t->setAnnotationColorYellow(); break;
-        case 97: _t->setAnnotationColorLime(); break;
-        case 98: _t->setAnnotationColorGreen(); break;
-        case 99: _t->setAnnotationColorAqua(); break;
-        case 100: _t->setAnnotationColorBlue(); break;
-        case 101: _t->setAnnotationColorPink(); break;
-        case 102: _t->setAnnotationColorPurple(); break;
-        case 103: _t->setAnnotationColorWhite(); break;
-        case 104: _t->removeAnnotation(); break;
-        case 105: _t->filterAnnotation(); break;
-        case 106: _t->takeScreenshot(); break;
-        case 107: _t->makeBookmark(); break;
-        case 108: _t->flattenMesh(); break;
-        case 109: _t->setCameraModeTrackball(); break;
-        case 110: _t->setCameraModeSurfaceWalker(); break;
-        case 111: _t->toggleImageProvenanceFeature(); break;
+        case 58: _t->helpOnline(); break;
+        case 59: _t->showToolbarFile(); break;
+        case 60: _t->showToolbarRender(); break;
+        case 61: _t->showToolbarInfo(); break;
+        case 62: _t->showToolbarView(); break;
+        case 63: _t->updateWindowMenu(); break;
+        case 64: _t->updateXML(); break;
+        case 65: _t->setSplit((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 66: _t->setUnsplit(); break;
+        case 67: _t->setCustomize(); break;
+        case 68: _t->splitFromHandle((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 69: _t->unsplitFromHandle((*reinterpret_cast< QAction*(*)>(_a[1]))); break;
+        case 70: _t->renderPoints(); break;
+        case 71: _t->renderWireframe(); break;
+        case 72: _t->renderSurface(); break;
+        case 73: _t->maximizeSubWindows(); break;
+        case 74: _t->renderTexture(); break;
+        case 75: _t->renderInterpolation(); break;
+        case 76: _t->renderInformation(); break;
+        case 77: _t->renderPolyIndicate(); break;
+        case 78: _t->setDirectionalLight(); break;
+        case 79: _t->measureDistance(); break;
+        case 80: _t->removeMeasureDistance(); break;
+        case 81: _t->viewFromFront(); break;
+        case 82: _t->viewFromTop(); break;
+        case 83: _t->viewFromLeft(); break;
+        case 84: _t->viewFromRight(); break;
+        case 85: _t->viewFromBottom(); break;
+        case 86: _t->viewFromBack(); break;
+        case 87: _t->viewSpinMotion(); break;
+        case 88: _t->generateReport(); break;
+        case 89: _t->writeAnnotation(); break;
+        case 90: _t->writePointNote(); break;
+        case 91: _t->writeSurfaceNote(); break;
+        case 92: _t->writePolygonNote(); break;
+        case 93: _t->writeFrustumNote(); break;
+        case 94: _t->setAnnotationColorRed(); break;
+        case 95: _t->setAnnotationColorMarron(); break;
+        case 96: _t->setAnnotationColorOrange(); break;
+        case 97: _t->setAnnotationColorYellow(); break;
+        case 98: _t->setAnnotationColorLime(); break;
+        case 99: _t->setAnnotationColorGreen(); break;
+        case 100: _t->setAnnotationColorAqua(); break;
+        case 101: _t->setAnnotationColorBlue(); break;
+        case 102: _t->setAnnotationColorPink(); break;
+        case 103: _t->setAnnotationColorPurple(); break;
+        case 104: _t->setAnnotationColorWhite(); break;
+        case 105: _t->removeAnnotation(); break;
+        case 106: _t->filterAnnotation(); break;
+        case 107: _t->takeScreenshot(); break;
+        case 108: _t->makeBookmark(); break;
+        case 109: _t->flattenMesh(); break;
+        case 110: _t->setCameraModeTrackball(); break;
+        case 111: _t->setCameraModeSurfaceWalker(); break;
+        case 112: _t->toggleImageProvenanceFeature(); break;
         default: ;
         }
     }
@@ -406,9 +408,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 112)
+        if (_id < 113)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 112;
+        _id -= 113;
     }
     return _id;
 }

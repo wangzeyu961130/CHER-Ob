@@ -280,7 +280,6 @@ public:
 		  interactor->SetInteractorStyle(style);
 		  style->SetCurrentRenderer(renderer);
 	  }
-	  qDebug() << "123456789\n";
   }	
 
   void finishNote()
