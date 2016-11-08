@@ -1480,6 +1480,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 {
 	mPath = new QString(path);
 	mPolygon = new std::vector<std::pair<double, double> >;
+	mPolygonImage = new std::vector<std::pair<int, int> >;
 	vtkSmartPointer<vtkIdTypeArray> ids = vtkSmartPointer<vtkIdTypeArray>::New();
 	
 	mFileName = new QString(path);
@@ -1493,7 +1494,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 		isSucceed = false;
 		return;
 	}
-	
+
     QTextStream in(mFile);
     QString firstLine = in.readLine();
 	bool okSize;
@@ -1505,7 +1506,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 		return;
 	}
 
-	for (int i = 0; i < polygonSize; i++)
+	for (int i = 1; i <= polygonSize; i++)
 	{
 		bool okX, okY;
 		double posX, posY;
@@ -1520,8 +1521,8 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 		mPolygon->push_back(std::pair<double, double>(posX, posY));
 		bool okImgX, okImgY;
 		int posImageX, posImageY;
-		posImageX = firstLine.split(" ")[2*i+12].split(",")[0].split("(")[1].toInt(&okImgX);
-		posImageY = firstLine.split(" ")[2*i+13].split(")")[0].toInt(&okImgY);
+		posImageX = firstLine.split(" ")[2*i + 2*polygonSize + 6].split(",")[0].split("(")[1].toInt(&okImgX);
+		posImageY = firstLine.split(" ")[2*i + 2*polygonSize + 7].split(")")[0].toInt(&okImgY);
 		if (!okImgX || !okImgY)
 		{
 			qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
@@ -1607,7 +1608,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	{
 		info.append(QString(" (") + QString::number(itImage->first) + QString(", ") + QString::number(itImage->second) + QString(")"));
 	}
-
+	
 	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
@@ -1627,7 +1628,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	qDebug() << "finish Polygon Note 2D instructor";
 	isSucceed = true;
 
-	//// TO BE TESTED, MEMORY VIOLATION HERE!
+	//// TO BE TESTED
 }
 void PolygonNote2D::removePolygonNote2D()
 {

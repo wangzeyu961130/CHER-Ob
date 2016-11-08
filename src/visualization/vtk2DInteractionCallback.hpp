@@ -505,7 +505,7 @@ public:
 		  Actor->SetMapper(PolyDataMapper);
 		  Actor->PickableOff();
 		  Actor->GetProperty()->LightingOn();
-		  Actor->GetProperty()->SetColor(0, 0, 1);
+		  Actor->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
 		  Actor->GetProperty()->SetLineWidth(2);
 		  Actor->VisibilityOn();
 		  renderer->AddActor(Actor);

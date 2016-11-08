@@ -1,8 +1,0 @@
-Polygon Note: World Coordinate 5 (454.259, 652.721) (364.897, 565.22) (443.089, 423.729) (511.972, 526.124) (457.983, 647.135) Image Coordinate 5 (454, 653) (365, 565) (443, 424) (512, 526) (458, 647)
-User: 
-Zach
-Color Type:
-YELLOW
-Note Start:
-test
-Linked Images:
