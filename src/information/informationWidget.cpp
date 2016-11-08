@@ -446,13 +446,13 @@ void Information::createSurfaceNote2D(double* point, int* pointImage, ColorType 
 	emit addNavigationItem(notePath, SURFACENOTE, NOTE2D);
 }
 
-void Information::createPolygonNote2D(std::vector<std::pair<int, int> >* polygon, ColorType color)
+void Information::createPolygonNote2D(std::vector<std::pair<double, double> >* polygon, std::vector<std::pair<int, int> >* polygonImage, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
 	updateCurrentPath();
 	int size = mPolygonNotes2D[notePath].size();
 	qDebug() << "Create Polygon Note 2D, current size = " << size;
-	PolygonNote2D* newNote = new PolygonNote2D(notePath, polygon, size, color, mw()->mUserName);
+	PolygonNote2D* newNote = new PolygonNote2D(notePath, polygon, polygonImage, size, color, mw()->mUserName);
 	newNote->showNote();
 	mPolygonNotes2D[notePath].push_back(newNote);
 	connect(mPolygonNotes2D[notePath][size], SIGNAL(removeNote(int, QString*)), this, SLOT(removePolygonNote2D(int, QString*)));
@@ -875,7 +875,7 @@ void Information::openPointNote2D(double* point)
 		bool isSame = true;
 		for (int j = 0; j  < 3; j++)
 		{
-			if (select[j] != point[j])
+			if (select[j] != point[j]) //// HAZARD TEST DOUBLE
 			{
 				isSame = false;
 				break;
@@ -899,7 +899,7 @@ void Information::openSurfaceNote2D(double* point)
 		bool isSame = true;
 		for (int j = 0; j  < 4; j++)
 		{
-			if (select[j] != point[j])
+			if (select[j] != point[j]) //// HAZARD TEST DOUBLE
 			{
 				isSame = false;
 				break;
@@ -914,17 +914,17 @@ void Information::openSurfaceNote2D(double* point)
 	}
 }
 
-void Information::openPolygonNote2D(std::vector<std::pair<int, int> >* polygon)
+void Information::openPolygonNote2D(std::vector<std::pair<double, double> >* polygon)
 {
 	updateCurrentPath();
 	for (int i = 0; i < mPolygonNotes2D[notePath].size(); ++i) 
 	{
-		std::vector<std::pair<int, int> >* select = mPolygonNotes2D[notePath][i]->getPolygon();
+		std::vector<std::pair<double, double> >* select = mPolygonNotes2D[notePath][i]->getPolygon();
 		bool isSame = true;
-		std::vector<std::pair<int, int> >::iterator it1, it2;
+		std::vector<std::pair<double, double> >::iterator it1, it2;
 		for (it1 = select->begin(), it2 = polygon->begin(); it1 = select->end(), it2 != polygon->end(); ++it1, ++it2)
 		{
-			if (it1->first != it2->first || it1->second != it2->second)
+			if (abs(it1->first - it2->first) > 0.000001 || abs(it1->second - it2->second) > 0.000001)
 			{
 				isSame = false;
 				break;

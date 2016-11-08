@@ -231,10 +231,11 @@ public:
 
 	/**
 	 * @brief  Create 2D notes with location info.
-	 * @param  polygon     The vector of a series of image coordinates, which is saved to mark the note on report.
-	 * @param  color       The color of the note.
+	 * @param  polygon		Polygon vertices point positions in world coordinate.
+	 * @param  polygonImage	The vector of a series of image coordinates, which is saved to mark the note on report.
+	 * @param  color		The color of the note.
 	 */
-	void createPolygonNote2D(std::vector<std::pair<int, int> >* polygon, ColorType color);
+	void createPolygonNote2D(std::vector<std::pair<double, double> >* polygon, std::vector<std::pair<int, int> >* polygonImage, ColorType color);
 
 	/**
 	 * @brief  Open 3D point notes with location info.
@@ -270,9 +271,9 @@ public:
 
 	/**
 	 * @brief  Open 2D polygon notes with location info.
-	 * @param  polygon ////
+	 * @param  polygon polygon vertices point positions in world coordinate.
 	 */
-	void openPolygonNote2D(std::vector<std::pair<int, int> >* polygon);
+	void openPolygonNote2D(std::vector<std::pair<double, double> >* polygon);
 
 	/**
 	 * @brief  Open notes from the tree widget in search widget when the item is double clicked.

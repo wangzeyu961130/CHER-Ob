@@ -1414,11 +1414,12 @@ void SurfaceNote2D::removeSurfaceNote2D()
 	this->hideNote();
 }
 
-PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<int, int> >* polygon, const int noteId, const ColorType type, const QString user)
+PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<double, double> >* polygon, const std::vector<std::pair<int, int> >* polygonImage, const int noteId, const ColorType type, const QString user)
 	: Note(noteId, type)
 {
 	mPath = new QString(path);
-    mPolygon = new std::vector<std::pair<int, int> >;
+    mPolygon = new std::vector<std::pair<double, double> >;
+	mPolygonImage = new std::vector<std::pair<int, int> >;
 	mFileName = new QString(path);
 	//mFileName->append(QDir::separator() + QString("Note") + WORD_SEPARATOR + QString::number(qHash(QString::number(number))) + QString(".txt"));
 	qsrand(time(NULL));
@@ -1441,18 +1442,21 @@ PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<int, int>
 	mFile = new QFile(*mFileName);
 
 	QString label;
-	// label.append(QString("Surface Note: Start (") + QString::number(point[0]) + QString(", ") + QString::number(point[1]) + QString(") End (") 
-	//	+ QString::number(point[2]) + QString(", ") + QString::number(point[3]) + QString(")"));
-	QString info(label);
-	info.append("Polygon Note: Image Coordinate\n");
-	std::vector<std::pair<int, int> >::const_iterator it;
-	int i = 0;
+	label.append(QString("Polygon Note: World Coordinate ") + QString::number(polygon->size()));
+	std::vector<std::pair<double, double> >::const_iterator it;
 	for (it = polygon->begin(); it != polygon->end(); it++)
 	{
-		i++;
-		mPolygon->push_back(*it);
-		info.append(QString::number(i) + " (" + QString::number(it->first) + ", " + QString::number(it->second) + ")\n");
+		label.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
 	}
+	QString info(label);
+	info.append(QString(" Image Coordinate ") + QString::number(polygonImage->size()));
+	std::vector<std::pair<int, int> >::const_iterator itImage;
+	for (itImage = polygonImage->begin(); itImage != polygonImage->end(); itImage++)
+	{
+		info.append(QString(" (") + QString::number(itImage->first) + QString(", ") + QString::number(itImage->second) + QString(")"));
+	}
+	info.append(QString("\n"));
+
 	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
@@ -1475,7 +1479,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	: Note(noteId)
 {
 	mPath = new QString(path);
-	mPolygon = new std::vector<std::pair<int, int> >;
+	mPolygon = new std::vector<std::pair<double, double> >;
 	vtkSmartPointer<vtkIdTypeArray> ids = vtkSmartPointer<vtkIdTypeArray>::New();
 	
 	mFileName = new QString(path);
@@ -1492,29 +1496,46 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	
     QTextStream in(mFile);
     QString firstLine = in.readLine();
-	if (firstLine.split(" ").size() != 4)
+	bool okSize;
+	int polygonSize = firstLine.split(" ")[4].toInt(&okSize);
+	if (firstLine.split(" ").size() != 4 * polygonSize + 8)
 	{
 		qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
 		isSucceed = false;
 		return;
 	}
 
+	for (int i = 0; i < polygonSize; i++)
+	{
+		bool okX, okY;
+		double posX, posY;
+		posX = firstLine.split(" ")[2*i+3].split(",")[0].split("(")[1].toDouble(&okX);
+		posY = firstLine.split(" ")[2*i+4].split(")")[0].toDouble(&okY);
+		if (!okX || !okY)
+		{
+			qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+			isSucceed = false;
+			return;
+		} 
+		mPolygon->push_back(std::pair<double, double>(posX, posY));
+		bool okImgX, okImgY;
+		int posImageX, posImageY;
+		posImageX = firstLine.split(" ")[2*i+12].split(",")[0].split("(")[1].toInt(&okImgX);
+		posImageY = firstLine.split(" ")[2*i+13].split(")")[0].toInt(&okImgY);
+		if (!okImgX || !okImgY)
+		{
+			qDebug() << "The Syntax of First Line is incorrect. The First Line is " << firstLine;
+			isSucceed = false;
+			return;
+		} 
+		mPolygonImage->push_back(std::pair<int, int>(posImageX, posImageY));
+	}
 
 	while(!in.atEnd())
 	{
-		QString tmpLines = in.readLine();
-		if (tmpLines == QString("User: ")) break;
-		if (tmpLines.split(" ").size() != 3)
-		{
-			qDebug() << "The Syntax of Polygon Vertices is incorrect. The Current Line is " << tmpLines;
-			isSucceed = false;
-			return;
-		}
-		bool okX, okY;
-		int currX, currY;
-		currX = tmpLines.split(" ")[1].split(",")[0].split("(")[1].toInt(&okX);
-		currY = tmpLines.split(" ")[2].split(")")[0].toInt(&okY);
-		mPolygon->push_back(std::pair<int, int>(currX, currY));
+		QString signal = in.readLine();
+		if (signal == QString("User: "))
+			break;
 	}
 	if (in.atEnd())
 	{
@@ -1572,18 +1593,21 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	}
 	this->setText(text);
 
-
 	QString label;
-	label.append("Polygon Note: Image Coordinate\n");
-	this->setLabel(label);
-	QString info(label);
-	std::vector<std::pair<int, int> >::const_iterator it;
-	int i = 0;
+	label.append(QString("Polygon Note: World Coordinate ") + QString::number(mPolygon->size()));
+	std::vector<std::pair<double, double> >::const_iterator it;
 	for (it = mPolygon->begin(); it != mPolygon->end(); it++)
 	{
-		i++;
-		info.append(QString::number(i) + " (" + QString::number(it->first) + ", " + QString::number(it->second) + ")\n");
+		label.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
 	}
+	QString info(label);
+	info.append(QString(" Image Coordinate ") + QString::number(mPolygonImage->size()));
+	std::vector<std::pair<int, int> >::const_iterator itImage;
+	for (itImage = mPolygonImage->begin(); itImage != mPolygonImage->end(); itImage++)
+	{
+		info.append(QString(" (") + QString::number(itImage->first) + QString(", ") + QString::number(itImage->second) + QString(")"));
+	}
+
 	QString userLabel = QString("User: ");
 	QString userInfo;
 	for (int i = 0; i < mUsers.size(); i++)
@@ -1596,14 +1620,14 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	this->setLabel(label);
 	info.append(userLabel + QString("\n") + userInfo + QString("\n"));
 	info.append(QString("Color Type:\n"));
-	info.append(colorType);
+	info.append(QString(colortype2str(mColor).c_str()));
 	info.append(QString("\nNote Start:"));
 	this->setInfo(info);
 	mFile->close();
 	qDebug() << "finish Polygon Note 2D instructor";
 	isSucceed = true;
 
-	//// TO BE TESTED
+	//// TO BE TESTED, MEMORY VIOLATION HERE!
 }
 void PolygonNote2D::removePolygonNote2D()
 {

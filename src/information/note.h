@@ -531,13 +531,13 @@ class PolygonNote2D: public Note
 public:
 	/**
 	 * @brief  Constructor when create a new 2D point notes with location info.
-	 * @param  path        The full note path.
-	 * @param  point       Point position in world coordinate.
-	 * @param  pointImage  The image coordinate, which is saved to mark the note on report.
-	 * @param  type        The color of the note.
-	 * @param  user        The user who creates the note.
+	 * @param  path			 The full note path.
+	 * @param  polygon       Polygon vertices point positions in world coordinate.
+	 * @param  polygonImage  The polygon vertices image coordinate, which is saved to mark the note on report.
+	 * @param  type			 The color of the note.
+	 * @param  user			 The user who creates the note.
 	 */
-	PolygonNote2D(QString path, const std::vector<std::pair<int, int> >* polygon, const int noteId, const ColorType type = YELLOW, const QString user = QString());
+	PolygonNote2D(QString path, const std::vector<std::pair<double, double> >* polygon,  const std::vector<std::pair<int, int> >* polygonImage, const int noteId, const ColorType type = YELLOW, const QString user = QString());
 
 	/**
 	 * @brief  Constructor when load a 2D point notes from note file.
@@ -551,7 +551,7 @@ public:
 	/**
 	 * @brief  Get the position of the point note.
 	 */
-	std::vector<std::pair<int, int> >* getPolygon() { return mPolygon; }
+	std::vector<std::pair<double, double> >* getPolygon() { return mPolygon; }
 
 	/**
 	 * @brief  Get the note id of the point note.
@@ -564,7 +564,8 @@ public:
 	void removePolygonNote2D();
 
 private:
-	std::vector<std::pair<int, int> >* mPolygon;
+	std::vector<std::pair<double, double> >* mPolygon;
+	std::vector<std::pair<int, int> >* mPolygonImage;
 };
 
 #endif // NOTE_H
