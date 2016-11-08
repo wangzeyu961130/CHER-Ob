@@ -444,24 +444,32 @@ public:
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
 
-	  vtkSmartPointer<vtkPoints> Points = vtkSmartPointer<vtkPoints>::New();
-	  vtkSmartPointer<vtkPolyLine> PolyLine = vtkSmartPointer<vtkPolyLine>::New();
-	  vtkSmartPointer<vtkCellArray> CellArray = vtkSmartPointer<vtkCellArray>::New();
-	  vtkSmartPointer<vtkPolyData> PolyData = vtkSmartPointer<vtkPolyData>::New();
-	  vtkSmartPointer<vtkPolyDataMapper> PolyDataMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	  vtkSmartPointer<vtkActor> Actor = vtkSmartPointer<vtkActor>::New();
+	  /*Points.push_back(vtkSmartPointer<vtkPoints>::New());
+	  PolyLine.push_back(vtkSmartPointer<vtkPolyLine>::New());
+	  CellArray.push_back(vtkSmartPointer<vtkCellArray>::New());
+	  PolyData.push_back(vtkSmartPointer<vtkPolyData>::New());
+	  PolyDataMapper.push_back(vtkSmartPointer<vtkPolyDataMapper>::New());
+	  Actor.push_back(vtkSmartPointer<vtkActor>::New());*/
+	  Points.push_back(vtkPoints::New());
+	  PolyLine.push_back(vtkPolyLine::New());
+	  CellArray.push_back(vtkCellArray::New());
+	  PolyData.push_back(vtkPolyData::New());
+	  PolyDataMapper.push_back(vtkPolyDataMapper::New());
+	  Actor.push_back(vtkActor::New());
 
 	  std::vector<std::pair<double, double> >* polygonPointer;
 	  std::vector<std::pair<int, int> >* polygonImagePointer;
+	  vtkPolyDataMapper* polygonPolyDataMapper;
+	  vtkActor* polygonActor;
+	  vtkSmartPointer<vtkPolyDataMapper> polygonPolyDataMapperSmart;
+	  vtkSmartPointer<vtkActor> polygonActorSmart;
+	  bool isSuccess = false;
 
 	  int currPos[2];
 	  interactor->GetEventPosition(currPos);
 	  vtkSmartPointer<vtkCellPicker> picker = vtkSmartPointer<vtkCellPicker>::New();
 	  picker->SetTolerance(0.0005);
 	  picker->Pick(currPos[0], currPos[1], 0, renderer);
-
-	  qDebug() << "Break Point 1...\n";
-	  qDebug() << picker->GetCellId() << '\n';
 
 	  if (picker->GetCellId() != -1)
 	  {
@@ -470,48 +478,91 @@ public:
 		  int* pointImageCoordinate = new int[3];
 		  picker->GetPointIJK(pointImageCoordinate);
 
-		  qDebug() << "Break Point 2...\n";
-		  qDebug() << pointImageCoordinate[0] << '\t' << pointImageCoordinate[1] << '\t' << pointImageCoordinate[2] << '\n';
-
 		  if(!mw()->mInformation) return;
 
 		  polygonPoints.push_back(std::make_pair(point[0], point[1]));
 		  polygonImagePoints.push_back(std::make_pair(pointImageCoordinate[0], pointImageCoordinate[1]));
 		  std::vector<std::pair<double, double> >::iterator it;
 		  for (it = polygonPoints.begin(); it != polygonPoints.end(); it++)
-			  Points->InsertNextPoint(it->first, it->second, 0);
+			  Points.back()->InsertNextPoint(it->first, it->second, 0);
 
-		  PolyLine->GetPointIds()->SetNumberOfIds(polygonPoints.size());
+		  PolyLine.back()->GetPointIds()->SetNumberOfIds(polygonPoints.size());
 		  for (int i = 0; i < polygonPoints.size(); i++)
-			  PolyLine->GetPointIds()->SetId(i, i);
+			  PolyLine.back()->GetPointIds()->SetId(i, i);
 		  if (polygonPoints.size() > 2 && abs(polygonPoints.back().first - polygonPoints.front().first) < 10
 			  && abs(polygonPoints.back().second - polygonPoints.front().second) < 10)
 		  {
-			  PolyLine->GetPointIds()->SetId(polygonPoints.size()-1, 0);
+			  PolyLine.back()->GetPointIds()->SetId(polygonPoints.size()-1, 0);
 			  polygonPointer = new std::vector<std::pair<double, double> >;
 			  polygonImagePointer = new std::vector<std::pair<int, int> >;
+			  polygonPolyDataMapper = vtkPolyDataMapper::New();
+			  polygonActor = vtkActor::New();
 			  *polygonPointer = polygonPoints;
 			  *polygonImagePointer = polygonImagePoints;
-			  mSelectedPolygon.push_back(std::make_pair(polygonPointer, Actor));
-			  displayPolygonNote(PolyDataMapper, polygonPointer);
-			  mw()->mInformation->createPolygonNote2D(polygonPointer, polygonImagePointer, mColor);
-			  polygonPoints.clear();
-			  qDebug() << "Draw Polygon Note";
-		  }
-		  CellArray->InsertNextCell(PolyLine);
-		  PolyData->SetPoints(Points);
-		  PolyData->SetLines(CellArray);
-		  PolyDataMapper->SetInput(PolyData);
-		  Actor->SetMapper(PolyDataMapper);
-		  Actor->PickableOff();
-		  Actor->GetProperty()->LightingOn();
-		  Actor->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
-		  Actor->GetProperty()->SetLineWidth(2);
-		  Actor->VisibilityOn();
-		  renderer->AddActor(Actor);
+			  PolyDataMapper.back()->ShallowCopy(polygonPolyDataMapper);
+			  Actor.back()->ShallowCopy(polygonActor);
+			  polygonPolyDataMapperSmart.TakeReference(polygonPolyDataMapper);
+			  polygonActorSmart.TakeReference(polygonActor);
+			  mSelectedPolygon.push_back(std::make_pair(polygonPointer, polygonActorSmart));
 
-		  qDebug() << "Break Point 3...\n";
-		  qDebug() << polygonPoints.size() << '\n';
+			  std::vector<vtkActor*>::iterator itActorUpdateRenderer;
+			  for (itActorUpdateRenderer = Actor.begin(); itActorUpdateRenderer != Actor.end(); itActorUpdateRenderer++)
+				  renderer->RemoveActor(*itActorUpdateRenderer);
+			  displayPolygonNote(polygonPolyDataMapperSmart, polygonPointer); //// TO BE IMPLEMENTED !!!
+			  renderer->AddActor(polygonActorSmart);
+			  mw()->mInformation->createPolygonNote2D(polygonPointer, polygonImagePointer, mColor);
+
+			  // Clear tmp drawings, non smart pointers should release memory manually
+			  polygonPoints.clear();
+			  polygonImagePoints.clear();
+			  std::vector<vtkPoints*>::iterator itPoints, itPointsEnd = Points.end();
+			  itPointsEnd--;
+			  for (itPoints = Points.begin(); itPoints != itPointsEnd; itPoints++)
+				  (*itPoints)->Delete();
+			  Points.clear();
+			  std::vector<vtkPolyLine*>::iterator itPolyLine, itPolyLineEnd = PolyLine.end();
+			  itPolyLineEnd--;
+			  for (itPolyLine = PolyLine.begin(); itPolyLine != itPolyLineEnd; itPolyLine++)
+				  (*itPolyLine)->Delete();
+			  PolyLine.clear();
+			  std::vector<vtkCellArray*>::iterator itCellArray, itCellArrayEnd = CellArray.end();
+			  itCellArrayEnd--;
+			  for (itCellArray = CellArray.begin(); itCellArray != itCellArrayEnd; itCellArray++)
+				  (*itCellArray)->Delete();
+			  CellArray.clear();
+			  std::vector<vtkPolyData*>::iterator itPolyData, itPolyDataEnd = PolyData.end();
+			  itPolyDataEnd--;
+			  for (itPolyData = PolyData.begin(); itPolyData != itPolyDataEnd; itPolyData++)
+				  (*itPolyData)->Delete();
+			  PolyData.clear();
+			  std::vector<vtkPolyDataMapper*>::iterator itPolyDataMapper, itPolyDataMapperEnd = PolyDataMapper.end();
+			  itPolyDataMapperEnd--;
+			  for (itPolyDataMapper = PolyDataMapper.begin(); itPolyDataMapper != itPolyDataMapperEnd; itPolyDataMapper++)
+				  (*itPolyDataMapper)->Delete();
+			  PolyDataMapper.clear();
+			  std::vector<vtkActor*>::iterator itActor, itActorEnd = Actor.end();
+			  itActorEnd--;
+			  for (itActor = Actor.begin(); itActor != itActorEnd; itActor++)
+				  (*itActor)->Delete();
+			  Actor.clear();
+
+			  qDebug() << "Draw Polygon Note";
+			  isSuccess = true;
+		  }
+		  if (!isSuccess)
+		  {
+			  CellArray.back()->InsertNextCell(PolyLine.back());
+			  PolyData.back()->SetPoints(Points.back());
+			  PolyData.back()->SetLines(CellArray.back());
+			  PolyDataMapper.back()->SetInput(PolyData.back());
+			  Actor.back()->SetMapper(PolyDataMapper.back());
+			  Actor.back()->PickableOff();
+			  Actor.back()->GetProperty()->LightingOn();
+			  Actor.back()->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
+			  Actor.back()->GetProperty()->SetLineWidth(2);
+			  Actor.back()->VisibilityOn();
+			  renderer->AddActor(Actor.back());
+		  }
 	  }
 	  //// TO BE TESTED, DELETE POINTER?
   }
@@ -1490,6 +1541,20 @@ private:
   int mPolygonNoteHighlight;
   double mRadius;
   ColorType mColor;
+
+  // For proper display of polygons
+  /*std::vector<vtkSmartPointer<vtkPoints> > Points;
+  std::vector<vtkSmartPointer<vtkPolyLine> > PolyLine;
+  std::vector<vtkSmartPointer<vtkCellArray> > CellArray;
+  std::vector<vtkSmartPointer<vtkPolyData> > PolyData;
+  std::vector<vtkSmartPointer<vtkPolyDataMapper> > PolyDataMapper;
+  std::vector<vtkSmartPointer<vtkActor> > Actor;*/
+  std::vector<vtkPoints*> Points;
+  std::vector<vtkPolyLine*> PolyLine;
+  std::vector<vtkCellArray*> CellArray;
+  std::vector<vtkPolyData*> PolyData;
+  std::vector<vtkPolyDataMapper*> PolyDataMapper;
+  std::vector<vtkActor*> Actor;
 };
 
 #endif // VTK2DINTERACTIONCALLBACK_HPP
