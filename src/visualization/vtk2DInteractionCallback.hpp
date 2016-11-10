@@ -229,7 +229,11 @@ public:
 			  {
 				 mSelectedSurface[i].second->VisibilityOn();
 			  }
-			  //// FOR POLYGON NOTES: VISIBLE
+			  for (int i = 0; i < mSelectedPolygon.size(); i++)
+			  {
+				 mSelectedPolygon[i].second->VisibilityOn();
+			  }
+			  //// TO BE TESTED
 		  }
 		  mw()->mInformation->startAnnotation();
 		  mw()->VTKA()->update();
@@ -244,7 +248,11 @@ public:
 		  {
 			  mSelectedSurface[i].second->VisibilityOff();
 		  }
-		  //// FOR POLYGON NOTES: VISIBLE
+		  for (int i = 0; i < mSelectedPolygon.size(); i++)
+		  {
+			  mSelectedPolygon[i].second->VisibilityOff();
+		  }
+		  //// TO BE TESTED
 		  mw()->mInformation->finishAnnotation();
 		  finishNote();
 	  }
@@ -508,7 +516,13 @@ public:
 			  std::vector<vtkActor*>::iterator itActorUpdateRenderer;
 			  for (itActorUpdateRenderer = Actor.begin(); itActorUpdateRenderer != Actor.end(); itActorUpdateRenderer++)
 				  renderer->RemoveActor(*itActorUpdateRenderer);
-			  displayPolygonNote(polygonPolyDataMapperSmart, polygonPointer); //// TO BE IMPLEMENTED !!!
+			  displayPolygonNote(polygonPolyDataMapperSmart, polygonPointer);
+			  polygonActorSmart->SetMapper(polygonPolyDataMapperSmart);
+			  polygonActorSmart->PickableOff();
+			  polygonActorSmart->GetProperty()->LightingOn();
+			  polygonActorSmart->GetProperty()->SetColor(ColorPixel[mColor][0], ColorPixel[mColor][1], ColorPixel[mColor][2]);
+			  polygonActorSmart->GetProperty()->SetLineWidth(2);
+			  polygonActorSmart->VisibilityOn();
 			  renderer->AddActor(polygonActorSmart);
 			  mw()->mInformation->createPolygonNote2D(polygonPointer, polygonImagePointer, mColor);
 
@@ -564,7 +578,7 @@ public:
 			  renderer->AddActor(Actor.back());
 		  }
 	  }
-	  //// TO BE TESTED, DELETE POINTER?
+	  //// TO BE TESTED
   }
   void displayPointNote(vtkSmartPointer<vtkPolyDataMapper> mapper, double* select)
   {
@@ -661,6 +675,7 @@ public:
 	  if (select->size() > 2 && abs(select->back().first - select->front().first) < 10
 		  && abs(select->back().second - select->front().second) < 10)
 	  {
+		  qDebug() << "2333333333333333333333333\n";
 		  PolyLine->GetPointIds()->SetId(select->size()-1, 0);
 	  }
 	  CellArray->InsertNextCell(PolyLine);
@@ -1014,7 +1029,7 @@ public:
 	  actor->GetProperty()->LightingOn();
       actor->GetProperty()->SetColor(ColorPixel[color][0], ColorPixel[color][1], ColorPixel[color][2]);
       actor->GetProperty()->SetLineWidth(2);
-      if (isDisplay)
+	  if (isDisplay)
 		  actor->VisibilityOn();
 	  else
 		  actor->VisibilityOff();
@@ -1029,26 +1044,22 @@ public:
   {
 	  vtkSmartPointer<QVTKInteractor> interactor = this->GetInteractor();
 	  vtkSmartPointer<vtkRenderer> renderer = interactor->GetRenderWindow()->GetRenderers()->GetFirstRenderer();
-
 	  vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-
       vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
 	  actor->SetMapper(mapper);
 	  actor->PickableOff();
 	  actor->GetProperty()->LightingOn();
       actor->GetProperty()->SetColor(ColorPixel[color][0], ColorPixel[color][1], ColorPixel[color][2]);
       actor->GetProperty()->SetLineWidth(2);
-      if (isDisplay)
+	  if (isDisplay)
 		  actor->VisibilityOn();
 	  else
 		  actor->VisibilityOff();
 
       renderer->AddActor(actor);
-
 	  mSelectedSurface.push_back(std::make_pair(point, actor));
 
 	  displaySurfaceNote(mapper, point);
- 
   }
 
   void displayLoadPolygonNote(std::vector<std::pair<double, double> >* polygon, const ColorType color, bool isDisplay = false)
@@ -1062,7 +1073,7 @@ public:
 	  actor->GetProperty()->LightingOn();
       actor->GetProperty()->SetColor(ColorPixel[color][0], ColorPixel[color][1], ColorPixel[color][2]);
       actor->GetProperty()->SetLineWidth(2);
-      if (isDisplay)
+	  if (isDisplay)
 		  actor->VisibilityOn();
 	  else
 		  actor->VisibilityOff();

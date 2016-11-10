@@ -1,8 +1,0 @@
-Polygon Note: World Coordinate 6 (823.186, 515.76) (760.597, 463.148) (789.624, 369.718) (880.333, 368.811) (902.103, 448.635) (821.372, 514.852) Image Coordinate 6 (823, 516) (761, 463) (790, 370) (880, 369) (902, 449) (821, 515)
-User: 
-Zach
-Color Type:
-YELLOW
-Note Start:
-123123123
-Linked Images:

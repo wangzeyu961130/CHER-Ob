@@ -207,7 +207,7 @@ VtkWidget::~VtkWidget(){
 }
 
 NoteMode VtkWidget::getNoteMode2D() const { return mCallback2D->GetNoteMode(); }
-NoteMode VtkWidget::getNoteMode3D() const { return mCallback3D->GetNoteMode(); } //// TO BE IMPLEMENTED & FIXED
+NoteMode VtkWidget::getNoteMode3D() const { return mCallback3D->GetNoteMode(); } //// TO BE TESTED
 
 void VtkWidget::updateCurrentSlice(int index)
 {
