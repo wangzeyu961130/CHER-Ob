@@ -1446,9 +1446,14 @@ PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<double, d
 	std::vector<std::pair<double, double> >::const_iterator it;
 	for (it = polygon->begin(); it != polygon->end(); it++)
 	{
-		label.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
+		label.append(QString("\n(") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
 	}
-	QString info(label);
+	QString info;
+	info.append(QString("Polygon Note: World Coordinate ") + QString::number(polygon->size()));
+	for (it = polygon->begin(); it != polygon->end(); it++)
+	{
+		info.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
+	}
 	info.append(QString(" Image Coordinate ") + QString::number(polygonImage->size()));
 	std::vector<std::pair<int, int> >::const_iterator itImage;
 	for (itImage = polygonImage->begin(); itImage != polygonImage->end(); itImage++)
@@ -1599,9 +1604,14 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	std::vector<std::pair<double, double> >::const_iterator it;
 	for (it = mPolygon->begin(); it != mPolygon->end(); it++)
 	{
-		label.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
+		label.append(QString("\n(") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
 	}
-	QString info(label);
+	QString info;
+	info.append(QString("Polygon Note: World Coordinate ") + QString::number(mPolygon->size()));
+	for (it = mPolygon->begin(); it != mPolygon->end(); it++)
+	{
+		info.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
+	}
 	info.append(QString(" Image Coordinate ") + QString::number(mPolygonImage->size()));
 	std::vector<std::pair<int, int> >::const_iterator itImage;
 	for (itImage = mPolygonImage->begin(); itImage != mPolygonImage->end(); itImage++)

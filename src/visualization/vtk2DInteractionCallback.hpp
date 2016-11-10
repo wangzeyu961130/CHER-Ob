@@ -674,10 +674,7 @@ public:
 		  PolyLine->GetPointIds()->SetId(i, i);
 	  if (select->size() > 2 && abs(select->back().first - select->front().first) < 10
 		  && abs(select->back().second - select->front().second) < 10)
-	  {
-		  qDebug() << "2333333333333333333333333\n";
 		  PolyLine->GetPointIds()->SetId(select->size()-1, 0);
-	  }
 	  CellArray->InsertNextCell(PolyLine);
 	  PolyData->SetPoints(Points);
 	  PolyData->SetLines(CellArray);
@@ -1428,7 +1425,7 @@ public:
 		  this->Slicing = 1;
 		  if (mUserIsAnnotating)
 		  {
-			  if (!choosePointNote() && !chooseSurfaceNote())
+			  if (!choosePointNote() && !chooseSurfaceNote() && !choosePolygonNote())
 			  {
 				  //turnoffHighlight();
 			  }

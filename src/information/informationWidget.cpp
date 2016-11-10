@@ -922,7 +922,7 @@ void Information::openPolygonNote2D(std::vector<std::pair<double, double> >* pol
 		std::vector<std::pair<double, double> >* select = mPolygonNotes2D[notePath][i]->getPolygon();
 		bool isSame = true;
 		std::vector<std::pair<double, double> >::iterator it1, it2;
-		for (it1 = select->begin(), it2 = polygon->begin(); it1 = select->end(), it2 != polygon->end(); ++it1, ++it2)
+		for (it1 = select->begin(), it2 = polygon->begin(); it1 != select->end() && it2 != polygon->end(); ++it1, ++it2)
 		{
 			if (abs(it1->first - it2->first) > 0.000001 || abs(it1->second - it2->second) > 0.000001)
 			{
