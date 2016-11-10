@@ -1015,7 +1015,7 @@ void Information::removePointNote2D(int noteId, QString* path)
 
 void Information::removeSurfaceNote2D(int noteId, QString* path)
 {
-	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "@@remove surface Note "<<noteId;
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes2D[*path].size(); ++i) 
 	{
@@ -1026,6 +1026,7 @@ void Information::removeSurfaceNote2D(int noteId, QString* path)
 			mSurfaceNotes2D[*path][i]->setRemoved(true);
 			hasNotesRemoved[notePath] = true;
 			emit removeNavigationItem(notePath, SURFACENOTE, i, NOTE2D);
+			qDebug() << "EMIT surface note ID " << i << "\n\n";
 			break;
 		}
 	}
@@ -1033,7 +1034,7 @@ void Information::removeSurfaceNote2D(int noteId, QString* path)
 
 void Information::removePolygonNote2D(int noteId, QString* path)
 {
-	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "!!remove polygon Note "<<noteId;
 	updateCurrentPath();
 	for (int i = 0; i < mPolygonNotes2D[*path].size(); ++i) 
 	{
@@ -1044,6 +1045,7 @@ void Information::removePolygonNote2D(int noteId, QString* path)
 			mPolygonNotes2D[*path][i]->setRemoved(true);
 			hasNotesRemoved[notePath] = true;
 			emit removeNavigationItem(notePath, POLYGONNOTE, i, NOTE2D);
+			qDebug() << "EMIT polygon note ID " << i << "\n\n";
 			break;
 		}
 	}
@@ -1576,7 +1578,7 @@ void Information::undoRemoveNote(QTreeWidgetItem* item)
 				qDebug()<<"Incorrect Notes!";
 			}
 			break;
-		case 5: 
+		case 5:
 			if (mSurfaceNotes2D[path].size() >= number)
 			{
 				if (mSurfaceNotes2D[path][number-1]->checkRemoved())

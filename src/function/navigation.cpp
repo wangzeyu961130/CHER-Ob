@@ -3,6 +3,7 @@
  - Codename: CHER-Ob (Yale Computer Graphics Group)
 
  - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
+			 Zeyu Wang (zeyu.wang@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -143,7 +144,7 @@ void Navigation::loadObjectNote(QTreeWidgetItem *object, const QString path)
 	noteLabel->setIcon(0, iconProvider.icon(QFileIconProvider::Folder));
 	object->addChild(noteLabel);
 	QVector<int> noteCount = mw()->mInformation->getNoteNumber(path);	// no notes are marked as removed
-	if (noteCount.size() == 6)
+	if (noteCount.size() == 7)
 	{
 		for (int i = 0; i < noteCount.size(); i++)
 		{
@@ -155,9 +156,11 @@ void Navigation::loadObjectNote(QTreeWidgetItem *object, const QString path)
 				case 0: label = QString("Annotation"); break;
 				case 1: label = QString("PointNote_"); break;
 				case 2: label = QString("SurfaceNote_"); break;
-				case 3: label = QString("FrusumNote_"); break;
+				case 3: label = QString("FrustumNote_"); break;
 				case 4: label = QString("PointNote2D_"); break;
 				case 5: label = QString("SurfaceNote2D_"); break;
+				case 6: label = QString("PolygonNote2D_"); break;
+				//// TO BE TESTED
 			}
 			if (i == 0)
 			{
@@ -322,7 +325,7 @@ void Navigation::addNoteItem(const QString path, const NoteMode type, const Note
 	if (isFound)
 	{
 		object = object->child(0);
-		int point = 0, surface = 0, frustum = 0, point2D = 0, surface2D = 0;
+		int point = 0, surface = 0, frustum = 0, point2D = 0, surface2D = 0, polygon2D = 0;
 		for (int k = 0; k < object->childCount(); k++)
 		{
 			QString text = object->child(k)->text(0).split("_")[0];
@@ -336,6 +339,8 @@ void Navigation::addNoteItem(const QString path, const NoteMode type, const Note
 				point2D++;
 			else if (text == QString("SurfaceNote2D") || text == QString("<font color=\"gray\">SurfaceNote2D"))
 				surface2D++;
+			else if (text == QString("PolygonNote2D") || text == QString("<font color=\"gray\">PolygonNote2D"))
+				polygon2D++;
 		}
 		QFileIconProvider iconProvider;
 		QTreeWidgetItem* newNote = new QTreeWidgetItem();
@@ -410,6 +415,17 @@ void Navigation::addNoteItem(const QString path, const NoteMode type, const Note
 			else
 				object->insertChild(point+surface+frustum, newNote);
 		}
+		else if (type == POLYGONNOTE)
+		{
+			newNote->setText(0, QString("PolygonNote2D_").append(QString::number(polygon2D+1)));
+			if (object->childCount() == 0)
+				object->addChild(newNote);
+			else if (object->child(0)->text(0) == QString("Annotation"))
+				object->insertChild(point+surface+frustum+point2D+surface2D+polygon2D+1, newNote);
+			else
+				object->insertChild(point+surface+frustum+point2D+surface2D+polygon2D, newNote);
+		}
+		//// TO BE TESTED
 		newNote->setText(1, objectPath);
 		newNote->setText(2, QString::number(1));
 	}
@@ -430,7 +446,7 @@ void Navigation::removeNoteItem(const QString path, const NoteMode type, const i
 	if (isFound)
 	{
 		object = object->child(0);
-		int point = 0, surface = 0, frustum = 0, point2D = 0, surface2D = 0;
+		int point = 0, surface = 0, frustum = 0, point2D = 0, surface2D = 0, polygon2D = 0;
 		for (int k = 0; k < object->childCount(); k++)
 		{
 			QString text = object->child(k)->text(0).split("_")[0];
@@ -444,6 +460,8 @@ void Navigation::removeNoteItem(const QString path, const NoteMode type, const i
 				point2D++;
 			else if (text == QString("SurfaceNote2D") || text == QString("<font color=\"gray\">SurfaceNote2D"))
 				surface2D++;
+			else if (text == QString("PolygonNote2D") || text == QString("<font color=\"gray\">PolygonNote2D"))
+				polygon2D++;
 		}
 		if (type == ANNOTATION)
 		{
@@ -533,7 +551,29 @@ void Navigation::removeNoteItem(const QString path, const NoteMode type, const i
 				}
 			}
 		}
-
+		else if (type == POLYGONNOTE)
+		{
+			if (object->childCount() != 0)
+			{
+				if (object->child(0)->text(0) == QString("Annotation"))
+				{
+					QString text = object->child(id+point+surface+frustum+point2D+surface2D+1)->text(0);
+					text.append(QString("</font>"));
+					text.prepend(QString("<font color=\"gray\">"));
+					object->child(id+point+surface+frustum+point2D+surface2D+1)->setText(0, text);
+					object->child(id+point+surface+frustum+point2D+surface2D+1)->setText(2, QString::number(0));
+				}
+				else
+				{
+					QString text = object->child(id+point+surface+frustum+point2D+surface2D)->text(0);
+					text.append(QString("</font>"));
+					text.prepend(QString("<font color=\"gray\">"));
+					object->child(id+point+surface+frustum+point2D+surface2D)->setText(0, text);
+					object->child(id+point+surface+frustum+point2D+surface2D)->setText(2, QString::number(0));
+				}
+			}
+		}
+		//// TO BE TESTED
 	}
 }
 

@@ -1441,9 +1441,19 @@ PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<double, d
 	qDebug(mFileName->toLatin1());
 	mFile = new QFile(*mFileName);
 
+	std::vector<std::pair<double, double> >::const_iterator it;
+	for (it = polygon->begin(); it != polygon->end(); it++)
+	{
+		mPolygon->push_back(std::pair<double, double>(it->first, it->second));
+	}
+	std::vector<std::pair<int, int> >::const_iterator itImage;
+	for (itImage = polygonImage->begin(); itImage != polygonImage->end(); itImage++)
+	{
+		mPolygonImage->push_back(std::pair<int, int>(itImage->first, itImage->second));
+	}
+
 	QString label;
 	label.append(QString("Polygon Note: World Coordinate ") + QString::number(polygon->size()));
-	std::vector<std::pair<double, double> >::const_iterator it;
 	for (it = polygon->begin(); it != polygon->end(); it++)
 	{
 		label.append(QString("\n(") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
@@ -1455,7 +1465,6 @@ PolygonNote2D::PolygonNote2D(QString path, const std::vector<std::pair<double, d
 		info.append(QString(" (") + QString::number(it->first) + QString(", ") + QString::number(it->second) + QString(")"));
 	}
 	info.append(QString(" Image Coordinate ") + QString::number(polygonImage->size()));
-	std::vector<std::pair<int, int> >::const_iterator itImage;
 	for (itImage = polygonImage->begin(); itImage != polygonImage->end(); itImage++)
 	{
 		info.append(QString(" (") + QString::number(itImage->first) + QString(", ") + QString::number(itImage->second) + QString(")"));
@@ -1642,7 +1651,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 }
 void PolygonNote2D::removePolygonNote2D()
 {
-	qDebug() << "Remove Surface Note 2D" << mFile->fileName();
+	qDebug() << "Remove Polygon Note 2D" << mFile->fileName();
 	mFile->remove();
 	this->hideNote();
 	//// TO BE TESTED
