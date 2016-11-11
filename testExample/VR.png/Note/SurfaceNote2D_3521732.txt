@@ -1,8 +1,0 @@
-Surface Note: Start (907.546, 468.591) End (1027.28, 353.39) Image Coordinate Start (908, 469) End (1027, 353)
-User: 
-Zach
-Color Type:
-YELLOW
-Note Start:
-old surface
-Linked Images:

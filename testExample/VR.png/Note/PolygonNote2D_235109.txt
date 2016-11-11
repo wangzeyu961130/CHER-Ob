@@ -1,8 +1,0 @@
-Polygon Note: World Coordinate 5 (732.477, 308.943) (659.91, 265.402) (713.428, 183.764) (757.876, 194.649) (733.384, 306.221) Image Coordinate 5 (732, 309) (660, 265) (713, 184) (758, 195) (733, 306)
-User: 
-Zach
-Color Type:
-YELLOW
-Note Start:
-old polygon
-Linked Images:

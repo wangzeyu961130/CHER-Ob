@@ -1,7 +1,0 @@
-Polygon Note: World Coordinate 6 (395.039, 527.552) (332.449, 507.596) (332.449, 354.297) (415.902, 332.527) (454, 441.378) (393.224, 521.202) Image Coordinate 6 (395, 528) (332, 508) (332, 354) (416, 333) (454, 441) (393, 521)User: 
-Zach
-Color Type:
-YELLOW
-Note Start:
-asdasdasdasd
-Linked Images:
