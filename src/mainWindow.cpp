@@ -837,9 +837,18 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 
 	if (list.isEmpty())
 	{
-	  QString message = fi.fileName() + tr(" is not a valid CHEROb project file.");
-	  QMessageBox::critical(this, tr("Project Error"), message);
-	  return false;
+		if (!readCHE)
+		{
+			QString message = fi.fileName() + tr(" is not a valid CHEROb project file.\nDo you want to open this entity file?");
+			QMessageBox::warning(this, tr("Project Error"), message);
+		}
+		else
+		{
+			QString message = fi.fileName() + tr(" is not a valid CHEROb entity file.\nDo you want to open this project file?");
+			QMessageBox::warning(this, tr("Project Error"), message);
+		}
+		// Modified by Zeyu Wang on Nov 11, 2016
+		return false;
 	}
 
 	currentProjectFullName = QDir::toNativeSeparators(QDir::currentPath());
@@ -1725,7 +1734,7 @@ void MainWindow::importCHE()
 	list = doc.elementsByTagName("CHEROb.cultural_heritage_entity");
 	if (list.isEmpty())
 	{
-	  QString message = fi.fileName() + tr(" is not a valid CHEROb project file.");
+	  QString message = fi.fileName() + tr(" is not a valid CHEROb entity file. Fail to import.");
 	  QMessageBox::critical(this, tr("Project Error"), message);
 	  return;
 	}

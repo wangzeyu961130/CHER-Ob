@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<CHEROb.project user="Zach" name="testExample" date="Fri Nov 11 02:05:09 2016">
+<CHEROb.project user="Zach" name="testExample" date="Fri Nov 11 21:58:18 2016">
  <project>
-  <keyword></keyword>
-  <affiliation></affiliation>
-  <description></description>
+  <keyword>Longmen, motion capture</keyword>
+  <affiliation>PKU&amp;Yale</affiliation>
+  <description>This is the description.</description>
  </project>
  <item filename="mainview.jpg/mainview.jpg">
   <cultural_heritage_entity>
@@ -30,7 +30,7 @@
    <near_plane>181.279</near_plane>
    <far_plane>185.857</far_plane>
   </clipping_range>
-  <parallel_scale>51.9303</parallel_scale>
+  <parallel_scale>76.0312</parallel_scale>
   <filetype>1</filetype>
   <interpolation_on>0</interpolation_on>
  </item>
@@ -92,6 +92,6 @@
   <filetype>1</filetype>
   <interpolation_on>0</interpolation_on>
  </item>
- <info date="Fri Nov 11 02:05:09 2016"/>
+ <info date="Fri Nov 11 21:58:18 2016"/>
  <layouts/>
 </CHEROb.project>

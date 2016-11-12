@@ -124,7 +124,7 @@ public:
 	/**
 	 * @brief  Set the application version number.
 	 */
-	const QString appVer() const {return tr(" 1.0.0"); }
+	const QString appVer() const {return tr(" 1.1.0"); }
 
 	/**
 	 * @brief  Set the bits of the running application.

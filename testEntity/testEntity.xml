@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<CHEROb.cultural_heritage_entity user="Zach" name="testEntity" date="Sat Nov 12 02:20:55 2016">
+ <cultural_heritage_entity>
+  <object>Buddha mesh</object>
+  <measurement></measurement>
+  <creation></creation>
+  <material></material>
+  <description></description>
+  <conservation></conservation>
+  <analyses></analyses>
+  <related></related>
+  <administration></administration>
+  <documents></documents>
+  <other></other>
+ </cultural_heritage_entity>
+ <item filename="statue.ply/statue.ply">
+  <cultural_heritage_entity>
+   <cultural_heritage_entity_path>C:\Users\zw274\Desktop\zw274\CHER-Ob-master\testEntity</cultural_heritage_entity_path>
+   <cultural_heritage_entity_object>statue.ply</cultural_heritage_entity_object>
+  </cultural_heritage_entity>
+  <camera_position>
+   <x>102.024</x>
+   <y>-3770.61</y>
+   <z>241.985</z>
+  </camera_position>
+  <focal_point>
+   <x>30.1017</x>
+   <y>780.835</y>
+   <z>87.5898</z>
+  </focal_point>
+  <camera_angle>30</camera_angle>
+  <view_up>
+   <x>0.0194681</x>
+   <y>0.0342036</y>
+   <z>0.999225</z>
+  </view_up>
+  <clipping_range>
+   <near_plane>4101.63</near_plane>
+   <far_plane>5135.84</far_plane>
+  </clipping_range>
+  <parallel_scale>1178.82</parallel_scale>
+  <filetype>2</filetype>
+  <directional_light>1</directional_light>
+  <light_vector>
+   <x>0</x>
+   <y>0</y>
+   <z>1</z>
+  </light_vector>
+  <brightness>1</brightness>
+  <contrast>1</contrast>
+  <display_mode>0</display_mode>
+ </item>
+ <info date="Sat Nov 12 02:20:55 2016"/>
+ <layouts/>
+</CHEROb.cultural_heritage_entity>
