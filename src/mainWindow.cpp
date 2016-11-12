@@ -840,14 +840,34 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 		if (!readCHE)
 		{
 			QString message = fi.fileName() + tr(" is not a valid CHEROb project file.\nDo you want to open this entity file?");
-			QMessageBox::warning(this, tr("Project Error"), message);
+			QMessageBox msgBox;
+			QPushButton *yesButton = msgBox.addButton(QMessageBox::Yes);
+			QPushButton *noButton = msgBox.addButton(QMessageBox::No);
+			msgBox.setWindowTitle(tr("Project Error"));
+			msgBox.setIcon(QMessageBox::Warning);
+			msgBox.setText(message);
+			msgBox.exec();
+			if (msgBox.clickedButton() == yesButton)
+			{
+				openCHE(fileName);
+			}
 		}
 		else
 		{
 			QString message = fi.fileName() + tr(" is not a valid CHEROb entity file.\nDo you want to open this project file?");
-			QMessageBox::warning(this, tr("Project Error"), message);
+			QMessageBox msgBox;
+			QPushButton *yesButton = msgBox.addButton(QMessageBox::Yes);
+			QPushButton *noButton = msgBox.addButton(QMessageBox::No);
+			msgBox.setWindowTitle(tr("Project Error"));
+			msgBox.setIcon(QMessageBox::Warning);
+			msgBox.setText(message);
+			msgBox.exec();
+			if (msgBox.clickedButton() == yesButton)
+			{
+				openProject(fileName);
+			}
 		}
-		// Modified by Zeyu Wang on Nov 11, 2016
+		//// Modified by Zeyu Wang on Nov 11, 2016
 		return false;
 	}
 
