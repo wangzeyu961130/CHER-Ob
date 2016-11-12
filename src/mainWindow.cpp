@@ -839,7 +839,7 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 	{
 		if (!readCHE)
 		{
-			QString message = fi.fileName() + tr(" is not a valid CHEROb project file.\nDo you want to open this entity file?");
+			QString message = fi.fileName() + tr(" is not a valid CHEROb project file.\nDo you want to open this as entity file?");
 			QMessageBox msgBox;
 			QPushButton *yesButton = msgBox.addButton(QMessageBox::Yes);
 			QPushButton *noButton = msgBox.addButton(QMessageBox::No);
@@ -854,7 +854,7 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 		}
 		else
 		{
-			QString message = fi.fileName() + tr(" is not a valid CHEROb entity file.\nDo you want to open this project file?");
+			QString message = fi.fileName() + tr(" is not a valid CHEROb entity file.\nDo you want to open this as project file?");
 			QMessageBox msgBox;
 			QPushButton *yesButton = msgBox.addButton(QMessageBox::Yes);
 			QPushButton *noButton = msgBox.addButton(QMessageBox::No);
