@@ -259,6 +259,16 @@ bool MainWindow::closeAll()
 		if(closeProject()) 
 		{
 			isClose = true;	// skip the eventfilter
+
+			QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
+			foreach(QMdiSubWindow *w, windows)
+			{
+				VtkView* mvc = qobject_cast<VtkView *>(w->widget());
+				VtkWidget* gla = mvc->currentView();
+				gla->annotate(false);
+			}
+			writeAnnotationAct->setChecked(false); // uncheck annotation before close
+
 			mdiArea->closeAllSubWindows();
 			isClose = false;
 			return true;
@@ -269,6 +279,16 @@ bool MainWindow::closeAll()
 		if(closeCHE()) 
 		{
 			isClose = true;	// skip the eventfilter
+			
+			QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
+			foreach(QMdiSubWindow *w, windows)
+			{
+				VtkView* mvc = qobject_cast<VtkView *>(w->widget());
+				VtkWidget* gla = mvc->currentView();
+				gla->annotate(false);
+			}
+			writeAnnotationAct->setChecked(false); // uncheck annotation before close
+
 			mdiArea->closeAllSubWindows();
 			isClose = false;
 			return true;
@@ -278,8 +298,8 @@ bool MainWindow::closeAll()
 }
 
 void MainWindow::closeAllWindows()
-{   
-    if(!VTKA()) 
+{
+    if(!VTKA())
 	{
         closeAll();
 		return;
@@ -849,7 +869,8 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 			msgBox.exec();
 			if (msgBox.clickedButton() == yesButton)
 			{
-				openCHE(fileName);
+				isCHE = true;
+				return readXML(fileName, objectList, objectType, filterList, false, true);
 			}
 		}
 		else
@@ -864,7 +885,8 @@ bool MainWindow::readXML(QString fileName, QVector<QPair<QString, QString> > &ob
 			msgBox.exec();
 			if (msgBox.clickedButton() == yesButton)
 			{
-				openProject(fileName);
+				isCHE = false;
+				return readXML(fileName, objectList, objectType, filterList, false, false);
 			}
 		}
 		//// Modified by Zeyu Wang on Nov 11, 2016
@@ -2060,7 +2082,7 @@ void MainWindow::createCTFolder(QString path)
 
 bool MainWindow::openProject(QString fileName)
 {
-  if (!this->closeAll() && currentProjectFullName != NULL)
+  if (currentProjectFullName != NULL && !this->closeAll())
 	  return false;
 
   if (fileName.isEmpty())
@@ -2095,7 +2117,7 @@ bool MainWindow::openProject(QString fileName)
   }
 
   isSaved = true;
-  setWindowTitle(appName()+appBits()+QString(" Project ")+currentProjectName);
+  setWindowTitle(appName()+appBits()+(isCHE ? QString(" CHE ") : QString(" Project "))+currentProjectName);
   updateMenus();
   if(this->VTKA() == 0)  return false;
   qb->reset();
@@ -3336,7 +3358,7 @@ bool MainWindow::openCHE(QString fileName)
 	}
 
 	isSaved = true;
-	setWindowTitle(appName()+appBits()+QString(" CHE ")+currentProjectName);
+	setWindowTitle(appName()+appBits()+(isCHE ? QString(" CHE ") : QString(" Project "))+currentProjectName);
 	updateMenus();
 	if(this->VTKA() == 0)  return false;
 	qb->reset();
@@ -3375,7 +3397,7 @@ void MainWindow::saveCHEAs()
 {
 	CHEInfoBasic* info = new CHEInfoBasic();
 	info = mCHETab->getCHEInfo();
-	SaveCHEAsDialog* dialog = new SaveCHEAsDialog(mUserName,  info, this->lastUsedDirectory.path());
+	SaveCHEAsDialog* dialog = new SaveCHEAsDialog(mUserName, info, this->lastUsedDirectory.path());
 	dialog->exec();
 	if (!dialog->checkOk())
 		return;

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<CHEROb.cultural_heritage_entity user="zach-entity" name="testFriendlyOpen" date="Sun Nov 13 19:59:56 2016">
+ <cultural_heritage_entity>
+  <object></object>
+  <measurement></measurement>
+  <creation></creation>
+  <material></material>
+  <description></description>
+  <conservation></conservation>
+  <analyses></analyses>
+  <related></related>
+  <administration></administration>
+  <documents></documents>
+  <other></other>
+ </cultural_heritage_entity>
+ <item filename="mainview.jpg/mainview.jpg">
+  <cultural_heritage_entity>
+   <cultural_heritage_entity_path>C:\Users\zw274\Desktop\zw274\CHER-Ob-master\testFriendlyOpen</cultural_heritage_entity_path>
+   <cultural_heritage_entity_object>mainview.jpg</cultural_heritage_entity_object>
+  </cultural_heritage_entity>
+  <camera_position>
+   <x>37.1203</x>
+   <y>29.464</y>
+   <z>183.11</z>
+  </camera_position>
+  <focal_point>
+   <x>37.1203</x>
+   <y>29.464</y>
+   <z>0</z>
+  </focal_point>
+  <camera_angle>30</camera_angle>
+  <view_up>
+   <x>0</x>
+   <y>1</y>
+   <z>0</z>
+  </view_up>
+  <clipping_range>
+   <near_plane>181.279</near_plane>
+   <far_plane>185.857</far_plane>
+  </clipping_range>
+  <parallel_scale>76.0312</parallel_scale>
+  <filetype>1</filetype>
+  <interpolation_on>0</interpolation_on>
+ </item>
+ <item filename="MoCap system.png/MoCap system.png">
+  <cultural_heritage_entity>
+   <cultural_heritage_entity_path>C:\Users\zw274\Desktop\zw274\CHER-Ob-master\testFriendlyOpen</cultural_heritage_entity_path>
+   <cultural_heritage_entity_object>MoCap system.png</cultural_heritage_entity_object>
+  </cultural_heritage_entity>
+  <camera_position>
+   <x>639.5</x>
+   <y>359.5</y>
+   <z>2834.5</z>
+  </camera_position>
+  <focal_point>
+   <x>639.5</x>
+   <y>359.5</y>
+   <z>0</z>
+  </focal_point>
+  <camera_angle>30</camera_angle>
+  <view_up>
+   <x>0</x>
+   <y>1</y>
+   <z>0</z>
+  </view_up>
+  <clipping_range>
+   <near_plane>2806.15</near_plane>
+   <far_plane>2877.01</far_plane>
+  </clipping_range>
+  <parallel_scale>936.292</parallel_scale>
+  <filetype>1</filetype>
+  <interpolation_on>0</interpolation_on>
+ </item>
+ <info date="Sun Nov 13 19:59:56 2016"/>
+ <layouts/>
+</CHEROb.cultural_heritage_entity>

@@ -276,6 +276,7 @@ void Information::annotationChanges()
 
 void Information::startAnnotation()
 {
+	//qDebug() << "startAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	saveButton->setEnabled(true);
 	removeButton->setEnabled(true);
@@ -284,6 +285,7 @@ void Information::startAnnotation()
 
 void Information::finishAnnotation()
 {
+	//qDebug() << "finishAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	dText->setReadOnly(true);
 	saveButton->setEnabled(false);
@@ -310,6 +312,7 @@ bool Information::loadAnnotation(const QString notePath)
 
 void Information::reloadAnnotation()
 {
+	//qDebug() << "reloadAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	//bool saved = content[notePath].second;
 	skipTextChange = true;
@@ -320,6 +323,7 @@ void Information::reloadAnnotation()
 
 void Information::clearAnnotation()
 {
+	//qDebug() << "clearAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	//bool saved = content[notePath].second;
 	skipTextChange = true;
@@ -330,6 +334,7 @@ void Information::clearAnnotation()
 
 void Information::saveAnnotation()
 {
+	//qDebug() << "saveAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	if (dText->toPlainText() == QString())
 		return;
@@ -352,6 +357,7 @@ void Information::saveAnnotation()
 
 void Information::removeAnnotation()
 {
+	//qDebug() << "removeAnnotation() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	QString fileName = notePath;
 	qDebug() << "removeAnnotation " << notePath;
@@ -369,6 +375,7 @@ void Information::removeAnnotation()
 void Information::createPointNote(double *pos, int cellId, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createPointNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mPointNotes[notePath].size();
 	qDebug() << "Create Point Note, current size = " << size;
@@ -385,6 +392,7 @@ void Information::createPointNote(double *pos, int cellId, ColorType color)
 void Information::createSurfaceNote(vtkSmartPointer<vtkSelectionNode> cellIds, QVector<double*> points, ColorType color, bool isCTVolume)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createSurfaceNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mSurfaceNotes[notePath].size();
 	qDebug() << "Create Surface Note, current size = " << size;
@@ -401,6 +409,7 @@ void Information::createSurfaceNote(vtkSmartPointer<vtkSelectionNode> cellIds, Q
 void Information::createFrustumNote(vtkSmartPointer<vtkPoints> points, vtkSmartPointer<vtkDataArray> normals, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createFrustumNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mFrustumNotes[notePath].size();
 	qDebug() << "Create Frustum Note, current size = " << size;
@@ -417,6 +426,7 @@ void Information::createFrustumNote(vtkSmartPointer<vtkPoints> points, vtkSmartP
 void Information::createPointNote2D(double* point,  int* pointImage, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createPointNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mPointNotes2D[notePath].size();
 	qDebug() << "Create Point Note 2D, current size = " << size;
@@ -433,6 +443,7 @@ void Information::createPointNote2D(double* point,  int* pointImage, ColorType c
 void Information::createSurfaceNote2D(double* point, int* pointImage, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createSurfaceNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mSurfaceNotes2D[notePath].size();
 	qDebug() << "Create Surface Note 2D, current size = " << size;
@@ -449,6 +460,7 @@ void Information::createSurfaceNote2D(double* point, int* pointImage, ColorType 
 void Information::createPolygonNote2D(std::vector<std::pair<double, double> >* polygon, std::vector<std::pair<int, int> >* polygonImage, ColorType color)
 {
 	//qDebug() <<mw()->VTKA()->mFilename;
+	//qDebug() << "createPolygonNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	int size = mPolygonNotes2D[notePath].size();
 	qDebug() << "Create Polygon Note 2D, current size = " << size;
@@ -744,6 +756,7 @@ bool Information::loadPolygonNote2D(const QString path, bool isLoadNoteMark, boo
 
 void Information::openPointNote(int cellId)
 {
+	//qDebug() << "openPointNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -758,6 +771,7 @@ void Information::openPointNote(int cellId)
 
 void Information::openSurfaceNote(vtkSmartPointer<vtkSelectionNode> cellIds, std::vector<double*> cornerPoints, bool isCTVolume)
 {
+	//qDebug() << "openSurfaceNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	bool isOpen = false;
 	if (!isCTVolume)
@@ -819,6 +833,7 @@ void Information::openSurfaceNote(vtkSmartPointer<vtkSelectionNode> cellIds, std
 
 void Information::openFrustumNote(vtkSmartPointer<vtkPlanes> planes)
 {
+	//qDebug() << "openFrustumNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	if (planes->GetNumberOfPlanes() != 6)
 	{
@@ -868,6 +883,7 @@ void Information::openFrustumNote(vtkSmartPointer<vtkPlanes> planes)
 
 void Information::openPointNote2D(double* point)
 {
+	//qDebug() << "openPointNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes2D[notePath].size(); ++i) 
 	{
@@ -892,6 +908,7 @@ void Information::openPointNote2D(double* point)
 
 void Information::openSurfaceNote2D(double* point)
 {
+	//qDebug() << "openSurfaceNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes2D[notePath].size(); ++i) 
 	{
@@ -916,6 +933,7 @@ void Information::openSurfaceNote2D(double* point)
 
 void Information::openPolygonNote2D(std::vector<std::pair<double, double> >* polygon)
 {
+	//qDebug() << "openPolygonNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPolygonNotes2D[notePath].size(); ++i) 
 	{
@@ -943,6 +961,7 @@ void Information::openPolygonNote2D(std::vector<std::pair<double, double> >* pol
 void Information::removePointNote(int noteId, QString* path)
 {
 	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "removePointNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[*path].size(); ++i) 
 	{
@@ -961,6 +980,7 @@ void Information::removePointNote(int noteId, QString* path)
 void Information::removeSurfaceNote(int noteId, QString* path)
 {
 	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "removeSurfaceNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes[*path].size(); ++i) 
 	{
@@ -980,6 +1000,7 @@ void Information::removeSurfaceNote(int noteId, QString* path)
 void Information::removeFrustumNote(int noteId, QString* path)
 {
 	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "removeFrustumNote() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mFrustumNotes[*path].size(); ++i) 
 	{
@@ -998,6 +1019,7 @@ void Information::removeFrustumNote(int noteId, QString* path)
 void Information::removePointNote2D(int noteId, QString* path)
 {
 	//qDebug() << "remove Note "<<noteId;
+	//qDebug() << "removePointNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes2D[*path].size(); ++i) 
 	{
@@ -1016,6 +1038,7 @@ void Information::removePointNote2D(int noteId, QString* path)
 void Information::removeSurfaceNote2D(int noteId, QString* path)
 {
 	//qDebug() << "remove surface Note "<<noteId;
+	//qDebug() << "removeSurfaceNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mSurfaceNotes2D[*path].size(); ++i) 
 	{
@@ -1034,6 +1057,7 @@ void Information::removeSurfaceNote2D(int noteId, QString* path)
 void Information::removePolygonNote2D(int noteId, QString* path)
 {
 	//qDebug() << "remove polygon Note "<<noteId;
+	//qDebug() << "removePolygonNote2D() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPolygonNotes2D[*path].size(); ++i) 
 	{
@@ -1320,6 +1344,7 @@ void Information::openNoteFromNavigation(QTreeWidgetItem* item)
 
 void Information::openNotesByUsers(const QVector<QString> users)
 {
+	//qDebug() << "openNotesByUsers() calls updateCurrentPath()\n";
 	if (!updateCurrentPath())
 		return;
 	QVector<QString> mUsers;
@@ -1637,6 +1662,7 @@ void Information::saveAllNotes()
 
 void Information::saveObjectNotes()
 {
+	//qDebug() << "saveObjectNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -1674,6 +1700,7 @@ void Information::closeAllNotes()
 
 void Information::closeObjectNotes()
 {
+	//qDebug() << "closeObjectNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -1704,7 +1731,8 @@ void Information::closeObjectNotes()
 
 void Information::removeAllNotes()
 {
-	qDebug() << "remove ALL Note ";
+	//qDebug() << "remove ALL Note ";
+	//qDebug() << "removeAllNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	hasNotesRemoved[notePath] = true;
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
@@ -1843,6 +1871,7 @@ void Information::removeAllNotes(QString path)
 
 void Information::removeUnSavedNotes()
 {
+	//qDebug() << "removeUnSavedNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -1980,6 +2009,7 @@ void Information::removeAllNotesMark()
 
 void Information::hideNotes()
 {
+	//qDebug() << "hideNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -2010,6 +2040,7 @@ void Information::hideNotes()
 
 void Information::showNotes()
 {
+	//qDebug() << "showNotes() calls updateCurrentPath()\n";
 	updateCurrentPath();
 	for (int i = 0; i < mPointNotes[notePath].size(); ++i) 
 	{
@@ -2048,7 +2079,7 @@ bool Information::updateCurrentPath()
 	}
 	else
 	{
-		qDebug() << "Error: cannot find Project Path for Information";
+		qDebug() << "??? Error: cannot find Project Path for Information";
 		notePath = QString("");
 		return false;
 	}
@@ -2123,6 +2154,7 @@ bool Information::checkAllSaved()
 
 bool Information::checkObjectSaved()
 {
+	//qDebug() << "checkObjectSaved() calls updateCurrentPath()\n";
 	if (!updateCurrentPath())
 		return true;
 	// Test whether there are removed notes and annotation
@@ -2292,6 +2324,7 @@ QVector<int> Information::getNoteNumber(const QString objectPath)
 QVector<QString> Information::getAllUsers()
 {
 	QVector<QString> mUsers;
+	//qDebug() << "getAllUsers() calls updateCurrentPath()\n";
 	if (!updateCurrentPath())
 		return mUsers;
 	std::vector<std::string> users;	// need to use std::unique to remove redundency
