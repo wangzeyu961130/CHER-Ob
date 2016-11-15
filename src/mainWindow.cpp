@@ -238,11 +238,21 @@ void MainWindow::closeEvent(QCloseEvent *event)
 			}
 		}
 	}
-	
+
 	isClose = true;
-    mdiArea->closeAllSubWindows();
+
+	QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
+	foreach(QMdiSubWindow *w, windows)
+	{
+		VtkView* mvc = qobject_cast<VtkView *>(w->widget());
+		VtkWidget* gla = mvc->currentView();
+		gla->annotate(false);
+	}
+	writeAnnotationAct->setChecked(false); // uncheck annotation before close
+
+	mdiArea->closeAllSubWindows();
 	isClose = false;
-    if (mdiArea->currentSubWindow()) 
+	if (mdiArea->currentSubWindow()) 
 	{
         event->ignore();
     } else 
