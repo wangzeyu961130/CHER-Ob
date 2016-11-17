@@ -1627,6 +1627,7 @@ PolygonNote2D::PolygonNote2D(QString path, QString fileName, const int noteId, b
 	{
 		info.append(QString(" (") + QString::number(itImage->first) + QString(", ") + QString::number(itImage->second) + QString(")"));
 	}
+	info.append(QString("\n"));
 	
 	QString userLabel = QString("User: ");
 	QString userInfo;

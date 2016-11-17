@@ -888,7 +888,7 @@ bool Information::loadPolygonNote2DFromFile(const QString noteFileName, const QS
 		mw()->VTKA(path)->loadPolygonNote2DMark(newNote->getPolygon(), newNote->getColorType(), isDisplayNoteMark);
 
 	qDebug() << "Path = " << path << endl;
-	qDebug() << "Load "<<mPolygonNotes2D[notePath].size()<<" Surface Note";
+	qDebug() << "Load "<<mPolygonNotes2D[notePath].size()<<" Polygon Note";
 	return isLoadSucceed;
 }
 
