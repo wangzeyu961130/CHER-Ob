@@ -310,7 +310,7 @@ qDebug()<<"in updatelight position";
     mCallback3D->SetLightTransform(transform);
 	qDebug()<<"after set transform";
     mCallback3D->updateLightingPosition();
-	qDebug()<<"before lieght position";
+	qDebug()<<"before leight position";
   }
 
   if(mQVTKWidget)  mQVTKWidget->show();

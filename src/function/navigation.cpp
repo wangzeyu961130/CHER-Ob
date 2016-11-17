@@ -4,6 +4,7 @@
 
  - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
 			 Zeyu Wang (zeyu.wang@yale.edu)
+			 Ying Yang (ying.yang.yy368@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -657,28 +658,157 @@ void Navigation::editBookmarkItem(const QString path, const QString newBookmarkN
 	}
 }
 
+void Navigation::menuSelection(QAction* action)
+{
+	qDebug() << "Triggered: " << action->text();
+	actionStr = action->text();
+} 
+
+QString Navigation::getPath(QTreeWidgetItem* item)
+{
+	return item->text(1) + QDir::separator() + QString("Note");
+}
+
+QString Navigation::getImageFileNameInNote(QString fileName)
+{
+	QString imageFileName;
+
+	QFile inputFile(fileName);
+	QString line;
+	if (inputFile.open(QIODevice::ReadOnly))
+	{
+	   QTextStream in(&inputFile);
+	   while (!in.atEnd()) {
+		  line = in.readLine();
+	   }
+	   inputFile.close();
+
+	   imageFileName = line.split(QDir::separator()).back();
+	}
+
+	return imageFileName;
+}
+
 void Navigation::showContextMenu(const QPoint& pos)
 {
 	QMenu menu;
-
 	// only show menu if there is an item being visualized.
 	if(!mw()->VTKA()) return;
-
 	QPoint globalPos = mTreeWidget->mapToGlobal(pos);
 	QTreeWidgetItem* item = mTreeWidget->itemAt(pos);
+
+	if (item && item->columnCount() == 3 && item->text(2).toInt() != 0)
+		menu.addAction("Copy");
+	if (!actionStr.isEmpty() && item && (item->columnCount() == 3 || item->text(0) == "Note"))
+		menu.addAction("Paste");
 	if(item && ((item->columnCount() == 3 && item->text(2).toInt() == 0) // if item is a removed note
 		|| (item->columnCount() == 4 && item->text(3).toInt() == 0)))	 // if item is a removed bookmark
 		menu.addAction("Undo Remove");
-	else
-		return;
+	//else
+	//	return;
 
+	connect(&menu, SIGNAL(triggered(QAction*)), this, SLOT(menuSelection(QAction*)));
 	QAction* act = menu.exec(globalPos);
 	if (act)
 	{
-		if (item->columnCount() == 3)
-			mw()->mInformation->undoRemoveNote(item);
-		else
-			mw()->mBookmark->undoRemoveBookmark(item);
+		if (actionStr == "Undo Remove") {
+			if (item->columnCount() == 3)
+				mw()->mInformation->undoRemoveNote(item);
+			else
+				mw()->mBookmark->undoRemoveBookmark(item);
+		} else if (actionStr == "Copy") {
+			srcStr = mw()->mInformation->getNoteFileName(item);
+			noteModeType = mw()->mInformation->getNoteModeType(item);
+			srcPath = item->text(1) + QDir::separator();
+		} else {
+			QString itemText1 = item->text(1);
+			if (itemText1 == "") {
+				QString parentStr = item->parent()->text(0);
+				QStringList findPath = srcStr.split("Note").front().split(QDir::separator());
+				QString strPath;
+				QStringList::Iterator strIt;
+				QStringList::Iterator endIt = findPath.end();
+				endIt--; endIt--;
+				for (strIt = findPath.begin(); strIt != endIt; strIt++)
+					itemText1 += *strIt + QDir::separator();
+				itemText1 += parentStr;
+			}
+
+			destStr = itemText1 + QDir::separator() + QString("Note");
+			QStringList list = srcStr.split(QDir::separator());
+			QString noteFileName = list.back();
+			destStr += QDir::separator() + noteFileName;
+
+			qDebug() << "srcStr = " << srcStr << endl;
+			qDebug() << "destStr = " << destStr << endl;
+
+			if (!QFile::copy(srcStr, destStr)) { // copy file
+				qDebug() << "Copy note failed!!\n";
+				return;
+			}
+
+			QString imageFilaeName = getImageFileNameInNote(destStr);
+			qDebug() << "imageFilaeName = " << imageFilaeName << endl;
+			if (imageFilaeName != "Linked Images:") // copy image 
+			{
+				QString folder = itemText1 + QDir::separator() + QString("images");
+				qDebug() << "folder = " << folder << endl;
+
+				if (!QDir(folder).exists()) {
+					QDir().mkdir(folder);
+				}
+				if ( !QFile::copy(srcPath + QString("images") + QDir::separator() + imageFilaeName, folder + QDir::separator() + imageFilaeName) ) { // copy file
+					qDebug() << "Copy image failed, or image already exists!!\n";
+				}
+			}
+
+			actionStr = "";
+			srcStr = "";
+
+			if (noteModeType.size() != 2) { return; }
+
+			// visualize the note in the Navigation 
+			NoteMode type;
+			NoteType dim;
+
+			if (noteModeType[0] == "PointNote") {
+				type = NoteMode::POINTNOTE;
+			} else if (noteModeType[0] == "SurfaceNote") {
+				type = NoteMode::SURFACENOTE;
+			} else if (noteModeType[0] == "PolygonNote") {
+				type = NoteMode::POLYGONNOTE;
+			} else if (noteModeType[0] == "FrustumNote") {
+				type = NoteMode::FRUSTUMNOTE;
+			} else {
+				type = NoteMode::UNDECLARE;
+				return;
+			}
+
+			if (noteModeType[1] == "2D") {
+				dim = NoteType::NOTE2D;
+			} else if (noteModeType[1] == "3D") {
+				dim = NoteType::NOTE3D;
+				QMessageBox::critical(this, tr("Copy Annotation Error"), tr("3D notes copy and paste not allowed."));
+				return;
+			} else {
+				dim = NoteType::NONE;
+				return;
+			} 
+			
+			addNoteItem(itemText1 + QDir::separator() + QString("Note"), type, dim);
+
+			// show the information
+			mw()->mInformation->setNotePath(itemText1 + QDir::separator() + QString("Note"));
+
+			//if (type == NoteMode::POINTNOTE && dim == NoteType::NOTE3D) { mw()->mInformation->loadPointNoteFromFile(noteFileName, itemText1); }
+			//else if (type == NoteMode::SURFACENOTE && dim == NoteType::NOTE3D) { mw()->mInformation->loadSurfaceNoteFromFile(noteFileName, itemText1); }
+			//else if (type == NoteMode::FRUSTUMNOTE && dim == NoteType::NOTE3D) { mw()->mInformation->loadFrustumNoteFromFile(noteFileName, itemText1); }
+			if (type == NoteMode::POINTNOTE && dim == NoteType::NOTE2D) { mw()->mInformation->loadPointNote2DFromFile(noteFileName, itemText1); }
+			else if (type == NoteMode::SURFACENOTE && dim == NoteType::NOTE2D) { mw()->mInformation->loadSurfaceNote2DFromFile(noteFileName, itemText1); }
+			else if (type == NoteMode::POLYGONNOTE && dim == NoteType::NOTE2D) { mw()->mInformation->loadPolygonNote2DFromFile(noteFileName, itemText1); }
+
+			mw()->mInformation->recoverNotePath();
+		}
 	}
 }
 

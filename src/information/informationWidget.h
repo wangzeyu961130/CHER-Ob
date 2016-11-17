@@ -2,9 +2,10 @@
 
  - Codename: CHER-Ob (Yale Computer Graphics Group)
 
- - Writers:  Weiqi Shi (weiqi.shi@yale.edu)
-			 Min H. Kim (minhkim@cs.yale.edu)
+ - Writers:  Min H. Kim (minhkim@cs.yale.edu)
+			 Weiqi Shi (weiqi.shi@yale.edu)
 			 Zeyu Wang (zeyu.wang@yale.edu)
+			 Ying Yang (ying.yang.yy368@yale.edu)
 
  - License:  GNU General Public License Usage
    Alternatively, this file may be used under the terms of the GNU General
@@ -338,9 +339,9 @@ public:
 	QVector<QPair<QString, NoteType> > getAllNotes(const QString objectPath);
 
 	/**
-	 * @brief  Get the number of notes for each note type (annotation, point, surface, frustm, point2d, surface2d)for navigation.
+	 * @brief  Get the number of notes for each note type (annotation, point, surface, frustm, point2d, surface2d, polygon2d) for navigation.
 	 * @param  objectPath  Object full path.
-	 * @return The vector of note numbers of each type: annotation (0 or 1), 3d point, 3d surface, 3d frustum, 2d point, 2d surface.
+	 * @return The vector of note numbers of each type: annotation (0 or 1), 3d point, 3d surface, 3d frustum, 2d point, 2d surface, 2d polygon.
 	 */
 	QVector<int> getNoteNumber(const QString objectPath);	
 
@@ -349,6 +350,12 @@ public:
 	 * @return The vector of all users.
 	 */
 	QVector<QString> getAllUsers();
+	
+	/**
+	 * Added by Ying to copy annotations
+	 */
+	QString getNoteFileName(QTreeWidgetItem* item);
+	QVector<QString> getNoteModeType(QTreeWidgetItem* item);
 
 signals:
 	/**
@@ -389,8 +396,7 @@ signals:
 	 */
 	void removeNavigationItem(const QString path, const NoteMode type, const int id, const NoteType dim = NONE);
 
-	public slots:
-
+public slots:
 	/**
 	 * @brief  Remove the 3D/2D note in curret object by using noteId.
 	 * @param  noteId  The note id number.
@@ -403,8 +409,7 @@ signals:
 	void removeSurfaceNote2D(int noteId, QString* path);
 	void removePolygonNote2D(int noteId, QString* path);
 
-private:
-
+public:
 	/**
 	 * @brief  Load the 3D/2D note from the absolute path.
 	 * @param  path               The absolute note path.
@@ -419,6 +424,20 @@ private:
 	bool loadSurfaceNote2D(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
 	bool loadPolygonNote2D(const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
 
+	/**
+	 * Added by Ying to copy annotations
+	 */
+	bool loadPointNoteFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadSurfaceNoteFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadFrustumNoteFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadPointNote2DFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadSurfaceNote2DFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	bool loadPolygonNote2DFromFile(const QString fileName, const QString path, bool isLoadNoteMark = true, bool isDisplayNoteMark = false);
+	
+	void setNotePath(QString path);
+	void recoverNotePath();
+
+private:
 	/**
 	 * @brief  Load Annotation from the absolute path.
 	 * @param  path    The absolute note path.
@@ -468,6 +487,7 @@ private:
 	QPushButton* saveButton;
 	QPushButton* removeButton;
 	QString notePath;
+	QString notePathPre;
 	QMap<QString, std::pair<QString, bool > > content;	// Annotation
     QMap<QString, QVector<PointNote*> > mPointNotes;
     QMap<QString, QVector<SurfaceNote*> > mSurfaceNotes;
